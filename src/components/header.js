@@ -15,10 +15,10 @@ class Header extends Component {
       // everything in a div tag for example
       return [
         <li className="nav-item" key={1}>
-          <Link className="nav-link" to="/signin">Sign In</Link>
+          <Link className="nav-link" to="/signin">Login</Link>
         </li>,
         <li className="nav-item" key={2}>
-          <Link className="nav-link" to="/signup">Sign Up</Link>
+          <Link className="nav-link" to="/signup">Cadastro</Link>
         </li>
       ];
     }
@@ -28,7 +28,7 @@ class Header extends Component {
   render() {
     return (
       <nav className="navbar navbar-light">
-        <Link to="/" className="navbar-brand">Redux Auth</Link>
+        <Link to="/" className="navbar-brand">Projeto Incluir</Link>
         <ul className="nav navbar-nav">
           {this.renderLinks()}
         </ul>
