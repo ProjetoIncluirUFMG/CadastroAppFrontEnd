@@ -4,7 +4,7 @@
   "description": "Front-end do Cadastro App",
   "main": "index.js",
   "scripts": {
-    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline",
+    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --content-base src",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch"
   },
@@ -28,6 +28,7 @@
     "axios": "0.16.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-1": "^6.24.1",
+    "bootstrap": "4.0.0-alpha.6",
     "lodash": "4.17.4",
     "prop-types": "^15.5.8",
     "react": "15.5.4",
@@ -37,6 +38,7 @@
     "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",
     "redux-form": "^6.6.3",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "tether": "^1.4.0"
   }
 }
