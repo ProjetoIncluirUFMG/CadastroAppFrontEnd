@@ -4,12 +4,33 @@ import * as actions from '../actions/cursos';
 
 class ListaCursos extends Component {
 
+	constructor() {
+		super();
+		this.state = {
+			cursos: []
+		};
+	}
+
 	componentWillMount() {
 		this.props.buscarCursos();
 	}
 
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			cursos: nextProps.listaCursos
+		});
+	}
+
+	renderizarListaDeCursos() {
+		const cursos = this.state.cursos.map((curso) => {
+			return (<li key={curso.id_curso}>{curso.nome_curso}</li>);
+		});
+
+		return (<ul>{cursos}</ul>);
+	}
+
 	render() {
-		return (<div>Test</div>);
+		return (<div>{this.renderizarListaDeCursos()}</div>);
 	}
 }
 

@@ -11,18 +11,17 @@ import {
 
 export function buscarCursos() {
 
-  return function(dispatch) { 
-
+  return function(dispatch) {
     axios.get(`${API_URL}/cursos`)
-      .then(response => {
+      .then(resposta => {
 
         dispatch({ 
           type: BUSCAR_LISTA_DE_CURSOS,
-          payload: response.data.cursos
+          payload: resposta.data
         });
 
       })
-      .catch(() => {
+      .catch((err) => {
         dispatch(erro('Erro ao buscar lista de cursos'));
       });
   }

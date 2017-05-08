@@ -24,4 +24,4 @@ ENV PORT 8003
 
 EXPOSE  8003
 
-CMD ["npm", "dev"]
+CMD ["npm", "run", "dev"]

@@ -1,1 +1,1 @@
-export const API_URL = 'http://localhost:3090';
+export const API_URL = 'http://local-api.projetoincluir.com';
