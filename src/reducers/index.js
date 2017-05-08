@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
-import authReducer from './auth_reducer';
+import autenticacaoReducer from './autenticacao_reducer';
+import cursosReducer from './cursos_reducer';
 
 const rootReducer = combineReducers({
-  form,  //form: form - ES6
-  auth: authReducer
+  form,
+  autenticacao: autenticacaoReducer,
+  cursos: cursosReducer
 });
 
 export default rootReducer;

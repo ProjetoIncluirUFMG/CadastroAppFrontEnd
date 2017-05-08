@@ -1,11 +1,7 @@
-# ReactReduxClientAuth
+Projeto Incluir - Front-end Sistema de Cadastro
+==================================
 
-This project needs to be executed together with:
-https://github.com/danielmapar/NodeExpressJWTAuth
+Instruções
+---------------
 
-###Getting Started###
-
-```
-	> npm install
-	> npm start
-```
+Siga as instruções no repositório https://github.com/ProjetoIncluirUFMG/Compose

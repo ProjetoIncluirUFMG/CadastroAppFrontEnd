@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+/*import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import * as actions from '../../actions/autenticacao';
 
 const required = value => value ? undefined : 'Required'
 const maxLength = max => value =>
@@ -33,7 +33,6 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
     <label>{label}</label>
     <fieldset className="form-group">
       <input className="form-control" {...input} placeholder={label} type={type}/>
-      {/*if the two are true, output the last (this is tricky JS)*/}
       {touched && ((error && <div className="error">{error}</div>) || (warning && <div className="warning">{warning}</div>))}
     </fieldset>
   </div>);
@@ -92,3 +91,4 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, actions)(SignupForm);
+*/

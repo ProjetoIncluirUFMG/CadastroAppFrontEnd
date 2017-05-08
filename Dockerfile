@@ -20,4 +20,8 @@ RUN yarn install \
 
 COPY . $APP_DIR
 
+ENV PORT 8003
+
+EXPOSE  8003
+
 CMD ["npm", "start"]
