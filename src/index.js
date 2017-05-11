@@ -28,6 +28,7 @@ ReactDOM.render(
     <Router>
       <App>
         <Route exact={true} path="/" component={ListaCursos} />
+        <Route path="/cadastro" component={ListaCursos} />
       </App>
     </Router>
   </Provider>

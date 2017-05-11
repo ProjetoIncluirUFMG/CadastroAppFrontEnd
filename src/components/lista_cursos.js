@@ -22,44 +22,79 @@ class ListaCursos extends Component {
 	}
 
 	renderizarListaDeCursos() {
-		const cursos = this.state.cursos.map((curso) => {
+		const cursos = {};
+
+		this.state.cursos.forEach((curso) => {
+			if (!cursos[curso.id_curso]) {
+				cursos[curso.id_curso] = {
+					id: curso.id_curso,
+					nome: curso.nome_curso,
+					descricao: curso.descricao_curso,
+					disciplinas: []
+				};
+			}
+
+			cursos[curso.id_curso].disciplinas.push({
+				id: curso.id_disciplina,
+				nome: curso.nome_disciplina,
+				ementa: curso.ementa_disciplina
+			});
+		});
+
+		const listaDeCursos = Object.keys(cursos).map(function(key) {
+			const curso = cursos[key];
+
 			return (
-				<span>
-					<a href={"#" + curso.id_curso} 
+				<span key={curso.id}>
+					<a href={"#Menu" + curso.id} 
 					   className="list-group-item list-group-item-warning" 
 					   data-toggle="collapse" 
 					   data-parent="#ListaDeCursos"
-					   key={curso.id_curso}
 					>
-					<b>{curso.nome_curso}</b>
+						<b>{curso.nome}</b>
 					</a>
-					<div className="collapse" id={curso.id_curso}>
-			        	<a href={"#SubMenu" + curso.id_curso} 
-			        	   className="list-group-item" 
-			        	   data-toggle="collapse" 
-			        	   data-parent={"#SubMenu" + curso.id_curso}>
-			        	   Subitem {curso.id_curso} <i className="fa fa-caret-down"></i>
-			        	</a>
-			        	<div className="collapse list-group-submenu" 
-			        		 id={"SubMenu" + curso.id_curso}>
-			            	<a href="#" className="list-group-item" data-parent={"#SubMenu" + curso.id_curso}>Descricao do curso</a>
-			        	</div>
-			        </div>
+					<div className="collapse" 
+					 id={"Menu" + curso.id}>
+					{
+						curso.disciplinas.map(disciplina => {
+							return (
+								<span key={disciplina.id}> 
+									<a href={"#SubMenu" + disciplina.id} 
+										className="list-group-item" 
+										data-toggle="collapse" 
+										data-parent={"#Menu" + curso.id}>
+										{disciplina.nome} <i className="fa fa-caret-down"></i>
+									</a>
+									<div className="collapse list-group-submenu" id={"SubMenu" + disciplina.id}>
+										<a href="#" className="list-group-item" data-parent={"#SubMenu" + disciplina.id}>
+										{disciplina.ementa ? disciplina.ementa : "Nenhuma ementa encontrada."}
+										</a>
+									</div>
+								</span>
+							);
+						})
+					}
+					</div>
+					
 		        </span>
 			);
 		});
 
 		return (
 		<div id="ListaDeCursos">
-			<div class="list-group panel">
-				{cursos}
+			<div className="list-group panel">
+				{listaDeCursos}
 			</div>
 		</div>
 		);
 	}
 
 	render() {
-		return (<div>{this.renderizarListaDeCursos()}</div>);
+		return (
+			<div>
+				{this.renderizarListaDeCursos()}
+			</div>
+		);
 	}
 }
 
