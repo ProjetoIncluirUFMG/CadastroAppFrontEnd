@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
 import * as actions from '../../actions/autenticacao';
-import * as validacoes from '../../utils/validacoesDeFormulario';
+import * as validacoes from '../genericos/formulario/utils/validacoesDeFormulario';
 import Input from '../genericos/formulario/Input';
 import DropDown from '../genericos/formulario/DropDown';
 
@@ -87,6 +87,13 @@ class Cadastro extends Component {
             component={Input} 
             tamanho={"60%"}
             label="RG"/>
+
+          <Field name="cpf" 
+            validate={validacoes.cpf} 
+            type="text" 
+            component={Input} 
+            tamanho={"100%"}
+            label="CPF"/>
 
           {this.mostrarAlertas()}
 
