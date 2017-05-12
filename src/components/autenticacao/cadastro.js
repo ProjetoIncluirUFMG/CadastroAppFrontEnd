@@ -1,55 +1,31 @@
-/*import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types'
+
 import * as actions from '../../actions/autenticacao';
+import * as validacoes from '../../utils/validacoesDeFormulario';
+import Input from '../genericos/formulario/Input';
+import DropDown from '../genericos/formulario/DropDown';
 
-const required = value => value ? undefined : 'Required'
-const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined
-const maxLength8 = maxLength(8)
-const number = value => value && isNaN(Number(value)) ? 'Must be a number' : undefined
-const minValue = min => value =>
-  value && value < min ? `Must be at least ${min}` : undefined
-const minValue18 = minValue(18)
-const email = value =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
-  'Invalid email address' : undefined
-const aol = value =>
-  value && /.+@aol\.com/.test(value) ?
-  'Really? You still use AOL for your email?' : undefined
-const passwordsMatch = (password, component) => 
-  component.password !== component.passwordConfirm ? 'Invalid repeat password' : undefined;
+const UFs = [
+  "AC","AL","AM","AP","BA","CE","DF",
+  "ES","GO","MA","MG","MS","MT","PA",
+  "PB","PE","PI","PR","RJ","RN","RO",
+  "RR","RS","SC","SE","SP","TO"
+];
 
-const renderField = ({ input, label, type, meta: { touched, error, warning } }) => {
-  console.log(`--------`)
-  console.log(input)
-  console.log(`label: ${label}`)
-  console.log(`type: ${type}`)
-  console.log(`touched: ${touched}`)
-  console.log(`error: ${error}`)
-  console.log(`--------`)
-
-  return (<div>
-    <label>{label}</label>
-    <fieldset className="form-group">
-      <input className="form-control" {...input} placeholder={label} type={type}/>
-      {touched && ((error && <div className="error">{error}</div>) || (warning && <div className="warning">{warning}</div>))}
-    </fieldset>
-  </div>);
-}
-
-class Signup extends Component {
+class Cadastro extends Component {
 
   submitForm(formProps) {
-    // Call action creator to sign up user (properties with no errors)
     this.props.signupUser(formProps);
   }
 
-  renderAlert() {
-    if (this.props.errorMessage) {
+  mostrarAlertas() {
+    if (this.props.mensagemDeErro) {
       return (
         <div className="alert alert-danger">
-          <strong>Oops!</strong> {this.props.errorMessage}
+          <strong>Oops!</strong> {this.props.mensagemDeErro}
         </div>
       );
     }
@@ -57,24 +33,65 @@ class Signup extends Component {
 
   render() {
 
-    const { error, handleSubmit, pristine, reset, submitting } = this.props
+    const { valid, handleSubmit, pristine, submitting } = this.props
+
+    const emProgresso = !valid || pristine || submitting;
 
     return (
       <div>
         <form onSubmit={handleSubmit(this.submitForm.bind(this))}>
-          <Field name="email" validate={email} type="text" component={renderField} label="Email"/>
-          <Field name="password" type="password" 
-            validate={maxLength8}
-            component={renderField} 
-            label="Password"/>
-          <Field name="passwordConfirm" type="password"
-            validate={[passwordsMatch.bind(this)]} 
-            component={renderField} 
-            label="Confirm Password"/>
-          {this.renderAlert()}
-          <div>
-            <button type="submit" className={'btn btn-primary ' + (pristine || submitting ? 'disabled' : '')} disabled={pristine || submitting}>Sign up!</button>
-            <button type="button" className="btn btn-default" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
+          <Field name="email" 
+            validate={validacoes.email} 
+            type="text" 
+            component={Input} 
+            tamanho={"100%"}
+            label="Email"/>
+
+          <Field name="senha" type="password" 
+            validate={[
+              validacoes.valorMinimoDeCaracteres(8),
+              validacoes.valorMaximoDeCaracteres(12)
+              ]}
+            component={Input} 
+            tamanho={"100%"}
+            label="Senha"/>
+
+          <Field name="confirmarSenha" type="password"
+            validate={[validacoes.confirmacaoDeSenha.bind(this)]} 
+            component={Input} 
+            tamanho={"100%"}
+            label="Confirmar Senha"/>
+
+          <hr />
+
+          <Field name="nome" 
+            validate={[
+              validacoes.valorMinimoDeCaracteres(4),
+              validacoes.valorMaximoDeCaracteres(100)
+              ]} 
+            type="text" 
+            component={Input} 
+            tamanho={"100%"}
+            label="Nome"/>
+
+          <Field name="uf_rg" 
+            opcoes={UFs}
+            validate={validacoes.obrigatorio} 
+            component={DropDown} 
+            tamanho={"40%"}
+            label="UF"/>
+
+          <Field name="numero_rg" 
+            validate={validacoes.obrigatorio} 
+            type="text" 
+            component={Input} 
+            tamanho={"60%"}
+            label="RG"/>
+
+          {this.mostrarAlertas()}
+
+          <div className="clearfix">
+            <button type="submit" className={'btn btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Cadastrar</button>
           </div>
         </form>
       </div>
@@ -82,13 +99,13 @@ class Signup extends Component {
   }
 }
 
-const SignupForm = reduxForm({
-  form: 'signup'  // a unique identifier for this form
-})(Signup)
+const CadastroRedux = reduxForm({
+  form: 'cadastro'  // identificador unico para esse formulario
+})(Cadastro)
 
 function mapStateToProps(state) {
-  return { errorMessage: state.auth.error };
+  return { error: state.autenticacao.erro };
 }
 
-export default connect(mapStateToProps, actions)(SignupForm);
-*/
+export default connect(mapStateToProps, actions)(CadastroRedux);
+

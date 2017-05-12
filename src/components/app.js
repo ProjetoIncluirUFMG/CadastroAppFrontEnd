@@ -3,7 +3,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 
-import Cabecalho from './cabecalho';
+import Cabecalho from './genericos/cabecalho';
 
 class App extends Component {
 

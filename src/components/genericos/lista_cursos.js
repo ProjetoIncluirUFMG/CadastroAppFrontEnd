@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions/cursos';
+import PropTypes from 'prop-types'
+
+import * as actions from '../../actions/cursos';
 
 class ListaCursos extends Component {
+
+	static propTypes = { }
 
 	constructor() {
 		super();
@@ -52,6 +56,7 @@ class ListaCursos extends Component {
 					   data-parent="#ListaDeCursos"
 					>
 						<b>{curso.nome}</b>
+						<span className="glyphicon glyphicon-chevron-down pull-right"></span>
 					</a>
 					<div className="collapse" 
 					 id={"Menu" + curso.id}>
@@ -63,7 +68,7 @@ class ListaCursos extends Component {
 										className="list-group-item" 
 										data-toggle="collapse" 
 										data-parent={"#Menu" + curso.id}>
-										{disciplina.nome} <i className="fa fa-caret-down"></i>
+										{disciplina.nome} <i className="glyphicon glyphicon-chevron-down pull-right"></i>
 									</a>
 									<div className="collapse list-group-submenu" id={"SubMenu" + disciplina.id}>
 										<a href="#" className="list-group-item" data-parent={"#SubMenu" + disciplina.id}>

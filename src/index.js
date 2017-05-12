@@ -6,7 +6,8 @@ import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 
 import App from './components/app';
-import ListaCursos from './components/lista_cursos';
+import ListaCursos from './components/genericos/lista_cursos';
+import Cadastro from './components/autenticacao/cadastro';
 
 import reducers from './reducers';
 import { AUTENTICAR_USUARIO } from './actions/autenticacao/tipos';
@@ -28,14 +29,8 @@ ReactDOM.render(
     <Router>
       <App>
         <Route exact={true} path="/" component={ListaCursos} />
-        <Route path="/cadastro" component={ListaCursos} />
+        <Route path="/cadastro" component={Cadastro} />
       </App>
     </Router>
   </Provider>
   , document.querySelector('.container'));
-
-/*
-        <Route path="/login" render={({history}) => (
-          <Signin history={history}/>
-        )} />
-*/

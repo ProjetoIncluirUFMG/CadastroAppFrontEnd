@@ -72,3 +72,12 @@
   width: 100%;
   height: 95px;
 }
+
+.clearfix {
+  clear: left;
+}
+
+.alert-warning.alerta {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}

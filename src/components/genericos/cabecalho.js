@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 
-const logoImgSrc = '../../images/logo-projeto-incluir.png';
+const logoImgSrc = '../../../images/logo-projeto-incluir.png';
 
 class Cabecalho extends Component {
 
