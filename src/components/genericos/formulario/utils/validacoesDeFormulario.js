@@ -8,6 +8,19 @@ export const valorMinimoDeCaracteres = min => valorDoCampo => {
 
 export const numero = valorDoCampo => valorDoCampo && isNaN(Number(valorDoCampo)) ? 'Este campo deve ser um número' : undefined;
 
+export const telefoneFixo = valorDoCampo => { 
+    return valorDoCampo && valorDoCampo.length < 14 ? `Telefone fixo incompleto` : undefined;
+};
+
+export const telefoneCelular = valorDoCampo => { 
+    return valorDoCampo && valorDoCampo.length < 15 ? `Telefone celular incompleto` : undefined;
+};
+
+export const sexo = (sexo, componente) => {
+    console.log("componente: ", componente);
+    return true ? `Telefone celular incompleto` : undefined;
+};
+
 export const email = valorDoCampo => {
 	return valorDoCampo && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(valorDoCampo) ?
   'Endereço de email inválido' : undefined
@@ -20,6 +33,9 @@ export const cpf = valorDoCampo => !CPFValido(valorDoCampo) ? 'CPF inválido' : 
 // Verifica se CPF é válido
 // http://www.receita.fazenda.gov.br/aplicacoes/atcta/cpf/funcoes.js
 const CPFValido = (strCPF) => {
+
+    strCPF = strCPF.replace(/\./g, '').replace(/-/g, '');
+
     let Soma;
     let Resto;
     Soma = 0;

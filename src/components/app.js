@@ -15,7 +15,7 @@ class App extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="app">
 				<Cabecalho {...this.props} />
 				<div className="espaco" />
 				{this.props.children}

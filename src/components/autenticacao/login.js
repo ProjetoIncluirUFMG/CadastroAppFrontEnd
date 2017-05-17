@@ -1,88 +1,75 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import PropTypes from 'prop-types'
 
-const required = value => value ? undefined : 'Required'
-const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined
-const maxLength15 = maxLength(15)
-const number = value => value && isNaN(Number(value)) ? 'Must be a number' : undefined
-const minValue = min => value =>
-  value && value < min ? `Must be at least ${min}` : undefined
-const minValue18 = minValue(18)
-const email = value =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
-  'Invalid email address' : undefined
-const aol = value =>
-  value && /.+@aol\.com/.test(value) ?
-  'Really? You still use AOL for your email?' : undefined
+import * as actions from '../../actions/autenticacao';
+import * as validacoes from '../genericos/formulario/utils/validacoesDeFormulario';
+import Input from '../genericos/formulario/Input';
+import DropDown from '../genericos/formulario/DropDown';
 
-const renderField = ({ input, label, type, meta: { touched, error, warning } }) => {
-  console.log(`--------`)
-  console.log(input)
-  console.log(`label: ${label}`)
-  console.log(`type: ${type}`)
-  console.log(`touched: ${touched}`)
-  console.log(`error: ${error}`)
-  console.log(`warning: ${warning}`)
-  console.log(`--------`)
+class Login extends Component {
 
-  return (<div>
-    <label>{label}</label>
-    <fieldset className="form-group">
-      <input className="form-control" {...input} placeholder={label} type={type}/>
-      {touched && ((error && <div className="error">{error}</div>) || (warning && <div className="warning">{warning}</div>))}
-    </fieldset>
-  </div>);
-}
-
-class Signin extends Component {
-
-  submitForm({email, password}) {
-    console.log(email, password);
-    const history = this.props.history;
+  submeterFormulario({email, password}) {
     this.props.signinUser({email, password, history});
   }
 
-  renderAlert() {
-    if (this.props.errorMessage) {
+  mostrarAlertas() {
+    if (this.props.mensagemDeErro) {
       return (
         <div className="alert alert-danger">
-          <strong>Oops! </strong> {this.props.errorMessage}
+          <strong>Oops!</strong> {this.props.mensagemDeErro}
         </div>
       );
     }
   }
 
   render() {
-    const { error, handleSubmit, pristine, reset, submitting } = this.props
+    const { valid, handleSubmit, pristine, submitting } = this.props
+
+    const emProgresso = !valid || pristine || submitting;
+
     return (
-      <form onSubmit={handleSubmit(this.submitForm.bind(this))}>
-        <Field name="email" type="text" 
-          component={renderField} 
+      <form onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
+        <Field 
+          name="email" 
+          type="text" 
+          component={Input} 
+          tamanho={"100%"}
           label="Email"
-          validate={email}
-          warn={aol}
+          validate={validacoes.email}
         />
-        <Field name="password" type="password" component={renderField} label="Password"/>
+
+        <Field name="senha" 
+          type="password" 
+          validate={[
+            validacoes.obrigatorio,
+            validacoes.valorMinimoDeCaracteres(8),
+            validacoes.valorMaximoDeCaracteres(12)
+          ]}
+          component={Input} 
+          tamanho={"100%"}
+          label="Senha"
+        />
+
         <br />
-        {this.renderAlert()}
+
+        {this.mostrarAlertas()}
+
         <div>
-          <button type="submit" className={'btn btn-primary ' + (pristine || submitting ? 'disabled' : '')} disabled={pristine || submitting}>Sign in</button>
-          <button type="button" className="btn btn-default" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
+          <button type="submit" className={'btn btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Login</button>
         </div>
       </form>
     )
   }
 }
 
-const SigninForm = reduxForm({
-  form: 'signin'  // a unique identifier for this form
-})(Signin)
+const LoginForm = reduxForm({
+  form: 'login'
+})(Login)
 
 function mapStateToProps(state) {
-  return { errorMessage: state.auth.error };
+  return { mensagemDeErro: state.autenticacao.erro };
 }
 
-export default connect(mapStateToProps, actions)(SigninForm);
+export default connect(mapStateToProps, actions)(LoginForm);

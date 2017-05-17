@@ -7,7 +7,7 @@ class DropDown extends Component {
     opcoes: PropTypes.array.isRequired,
     input: PropTypes.object.isRequired,
     label: PropTypes.string.isRequired,
-    tamanho: PropTypes.string.isRequired
+    style: PropTypes.object.isRequired
   }
 
   renderizarValidacao = (touched, error, warning) => {
@@ -19,9 +19,9 @@ class DropDown extends Component {
   )
 
   render() {
-    const { input, label, tamanho, opcoes, meta: { touched, error, warning } } = this.props;
+    const { input, label, style, opcoes, meta: { touched, error, warning } } = this.props;
     return (
-      <div className="pull-left" style={{width: tamanho}}>
+      <div className="pull-left" style={style}>
         <label>{label}</label>
         <fieldset className="form-group">
           <select className="form-control" {...input}>

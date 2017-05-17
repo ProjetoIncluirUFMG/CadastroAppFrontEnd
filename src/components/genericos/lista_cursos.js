@@ -86,7 +86,7 @@ class ListaCursos extends Component {
 		});
 
 		return (
-		<div id="ListaDeCursos">
+		<div className="lista_cursos" id="ListaDeCursos">
 			<div className="list-group panel">
 				{listaDeCursos}
 			</div>
