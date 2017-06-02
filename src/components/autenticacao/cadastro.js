@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import * as actions from '../../actions/autenticacao';
 import * as validacoes from '../genericos/formulario/utils/validacoesDeFormulario';
@@ -211,6 +212,7 @@ class Cadastro extends Component {
             validate={[
             	validacoes.obrigatorio
             ]}
+						maxDate={moment()}
             style={{width: "100%"}}
           />
 

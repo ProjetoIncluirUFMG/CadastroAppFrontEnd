@@ -25,7 +25,7 @@ export default class renderDatePicker extends Component {
   }
 
   render () {
-		const { input, label, style, meta: { touched, error } } = this.props;
+		const { input, label, style, meta: { touched, error }, ...rest } = this.props;
 
     return (
 			<div className="pull-left" style={style}>
@@ -33,12 +33,12 @@ export default class renderDatePicker extends Component {
         <fieldset className="form-group">
         	<DatePicker
 	          {...input}
+						{...rest}
 						locale="pt-br"
 						peekNextMonth
 				    showMonthDropdown
 				    showYearDropdown
 				    dropdownMode="select"
-						maxDate={moment()}
 	          placeholder={label}
 	          dateFormat="DD-MM-YYYY"
 	          selected={input.value ? moment(input.value, 'DD-MM-YYYY') : null}
