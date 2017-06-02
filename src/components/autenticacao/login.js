@@ -10,11 +10,11 @@ import DropDown from '../genericos/formulario/DropDown';
 
 class Login extends Component {
 
-  submeterFormulario({email, password}) {
-    this.props.signinUser({email, password, history});
+	submeterFormulario(formProps) {
+    this.props.signupUser(formProps);
   }
 
-  mostrarAlertas() {
+	mostrarAlertas() {
     if (this.props.mensagemDeErro) {
       return (
         <div className="alert alert-danger">
@@ -30,36 +30,42 @@ class Login extends Component {
     const emProgresso = !valid || pristine || submitting;
 
     return (
-      <form onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
-        <Field 
-          name="email" 
-          type="text" 
-          component={Input} 
-          tamanho={"100%"}
-          label="Email"
-          validate={validacoes.email}
-        />
+			<div className="cadastro">
+        <form onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
+					<Field
+						label="Email"
+						name="email"
+						type="text"
+						component={Input}
+						validate={[
+							validacoes.obrigatorio,
+							validacoes.email
+						]}
+						style={{width: "100%"}}
+					/>
 
-        <Field name="senha" 
-          type="password" 
-          validate={[
-            validacoes.obrigatorio,
-            validacoes.valorMinimoDeCaracteres(8),
-            validacoes.valorMaximoDeCaracteres(12)
-          ]}
-          component={Input} 
-          tamanho={"100%"}
-          label="Senha"
-        />
+					<Field
+						label="Senha"
+						name="senha"
+						type="password"
+						component={Input}
+						validate={[
+							validacoes.obrigatorio,
+							validacoes.valorMinimoDeCaracteres(8),
+							validacoes.valorMaximoDeCaracteres(12)
+						]}
+						style={{width: "100%"}}
+					/>
 
-        <br />
+	        <br />
 
-        {this.mostrarAlertas()}
+	        {this.mostrarAlertas()}
 
-        <div>
-          <button type="submit" className={'btn btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Login</button>
-        </div>
-      </form>
+					<div className="clearfix top_space">
+            <button type="submit" className={'btn btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Login</button>
+          </div>
+	      </form>
+			</div>
     )
   }
 }

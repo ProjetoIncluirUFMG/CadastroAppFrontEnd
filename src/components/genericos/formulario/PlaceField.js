@@ -11,13 +11,15 @@ const AutocompleteItem = ({ formattedSuggestion }) => (
 export default class PlaceField extends Component {
 
 	render() {
-		const { input, label, style, meta: { touched, error } } = this.props;
+		const { input, label, placeholder, style, meta: { touched, error } } = this.props;
 
 		const cssClasses = {
 	    root: 'form-group',
 	    input: 'form-control',
 	    autocompleteContainer: 'autocomplete-container'
 	  };
+
+		input.placeholder = placeholder;
 
 		return (
 			<div className="pull-left" style={style}>

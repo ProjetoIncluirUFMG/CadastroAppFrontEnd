@@ -73,6 +73,12 @@
   margin-left:20px;
 }
 
+/* Home Component */
+
+.home .descricao {
+	font-size: 19px;
+}
+
 /* App Component */
 
 .app .espaco {
@@ -101,4 +107,14 @@
 
 .cadastro .top_space {
 	padding-top: 20px;
+}
+
+/* Login Component */
+
+.login .top_space {
+	padding-top: 20px;
+}
+
+.login .clearfix {
+  clear: left;
 }

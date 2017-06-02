@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 
 import App from './components/app';
-import ListaCursos from './components/genericos/lista_cursos';
+import Home from './components/home';
 import Cadastro from './components/autenticacao/cadastro';
 import Login from './components/autenticacao/login';
 
@@ -29,7 +29,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <App>
-        <Route exact={true} path="/" component={ListaCursos} />
+        <Route exact={true} path="/" component={Home} />
         <Route path="/cadastro" component={Cadastro} />
         <Route path="/login" component={Login} />
       </App>

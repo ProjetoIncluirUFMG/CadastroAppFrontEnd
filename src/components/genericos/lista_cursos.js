@@ -50,23 +50,23 @@ class ListaCursos extends Component {
 
 			return (
 				<span key={curso.id}>
-					<a href={"#Menu" + curso.id} 
-					   className="list-group-item list-group-item-warning" 
-					   data-toggle="collapse" 
+					<a href={"#Menu" + curso.id}
+					   className="list-group-item list-group-item-warning"
+					   data-toggle="collapse"
 					   data-parent="#ListaDeCursos"
 					>
 						<b>{curso.nome}</b>
 						<span className="glyphicon glyphicon-chevron-down pull-right"></span>
 					</a>
-					<div className="collapse" 
+					<div className="collapse"
 					 id={"Menu" + curso.id}>
 					{
 						curso.disciplinas.map(disciplina => {
 							return (
-								<span key={disciplina.id}> 
-									<a href={"#SubMenu" + disciplina.id} 
-										className="list-group-item" 
-										data-toggle="collapse" 
+								<span key={disciplina.id}>
+									<a href={"#SubMenu" + disciplina.id}
+										className="list-group-item"
+										data-toggle="collapse"
 										data-parent={"#Menu" + curso.id}>
 										{disciplina.nome} <i className="glyphicon glyphicon-chevron-down pull-right"></i>
 									</a>
@@ -80,7 +80,7 @@ class ListaCursos extends Component {
 						})
 					}
 					</div>
-					
+
 		        </span>
 			);
 		});
