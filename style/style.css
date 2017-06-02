@@ -28,7 +28,7 @@
   font-weight: bold!important;
 }
 
-.cabecalho .navbar-inverse .navbar-toggle:focus, 
+.cabecalho .navbar-inverse .navbar-toggle:focus,
 .cabecalho .navbar-inverse .navbar-toggle:hover {
   background-color: white;
 }
@@ -55,7 +55,7 @@
     padding-left: 10px;
   }
 
-  .cabecalho .navbar-brand, 
+  .cabecalho .navbar-brand,
   .cabecalho .navbar-nav li a {
     line-height: 40px;
     height: 50px;
@@ -97,4 +97,8 @@
 
 .cadastro .linha {
   width: 100%;
+}
+
+.cadastro .top_space {
+	padding-top: 20px;
 }

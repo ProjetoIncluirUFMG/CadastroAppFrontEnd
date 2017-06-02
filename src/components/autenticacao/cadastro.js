@@ -3,7 +3,7 @@ const  { DOM: { input, select, textarea } } = React
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 import * as actions from '../../actions/autenticacao';
 import * as validacoes from '../genericos/formulario/utils/validacoesDeFormulario';
@@ -12,6 +12,10 @@ import * as normalizacoes from '../genericos/formulario/utils/normalizacaoDeForm
 import Input from '../genericos/formulario/Input';
 import DropDown from '../genericos/formulario/DropDown';
 import RadioGroup from '../genericos/formulario/RadioGroup';
+import Checkbox from '../genericos/formulario/Checkbox';
+import { default as DatePicker } from '../genericos/formulario/DatePicker';
+import PlaceField from '../genericos/formulario/PlaceField';
+import Captcha from '../genericos/formulario/Captcha';
 
 const selector = formValueSelector('cadastro');
 
@@ -20,6 +24,15 @@ const UFs = [
   "ES","GO","MA","MG","MS","MT","PA",
   "PB","PE","PI","PR","RJ","RN","RO",
   "RR","RS","SC","SE","SP","TO"
+];
+
+const Escolaridades = [
+  "Fundamental Completo",
+	"Fundamental Incompleto",
+	"Médio Completo",
+	"Médio Incompleto",
+	"Superior Completo",
+	"Superior Incompleto"
 ];
 
 class Cadastro extends Component {
@@ -47,139 +60,190 @@ class Cadastro extends Component {
     return (
       <div className="cadastro">
         <form onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
-          <Field name="email" 
+          <Field
+						label="Email"
+						name="email"
+						type="text"
+						component={Input}
             validate={[
               validacoes.obrigatorio,
               validacoes.email
-            ]} 
-            type="text" 
-            component={Input} 
+            ]}
             style={{width: "100%"}}
-            label="Email"/>
+					/>
 
-          <Field name="senha" type="password" 
+          <Field
+						label="Senha"
+						name="senha"
+						type="password"
+						component={Input}
             validate={[
               validacoes.obrigatorio,
               validacoes.valorMinimoDeCaracteres(8),
               validacoes.valorMaximoDeCaracteres(12)
             ]}
-            component={Input} 
             style={{width: "100%"}}
-            label="Senha"/>
+          />
 
-          <Field name="confirmarSenha" type="password"
+          <Field
+						label="Confirmar Senha"
+						name="confirmarSenha"
+						type="password"
+						component={Input}
             validate={[
               validacoes.obrigatorio,
               validacoes.confirmacaoDeSenha.bind(this)
-            ]} 
-            component={Input} 
+            ]}
             style={{width: "100%"}}
-            label="Confirmar Senha"/>
+					/>
 
           <hr className="linha" />
 
-          <Field name="nome" 
+          <Field
+						label="Nome"
+						name="nome"
+						type="text"
+						component={Input}
             validate={[
               validacoes.obrigatorio,
               validacoes.valorMinimoDeCaracteres(4),
               validacoes.valorMaximoDeCaracteres(100)
-              ]} 
-            type="text" 
-            component={Input} 
+            ]}
             style={{width: "100%"}}
-            label="Nome"/>
+          />
 
-          <Field name="uf_rg" 
+          <Field
+						label="UF"
+						name="uf_rg"
+						component={DropDown}
             opcoes={UFs}
-            validate={validacoes.obrigatorio} 
-            component={DropDown} 
+            validate={validacoes.obrigatorio}
             style={{width: "30%", marginRight: "2%"}}
-            label="UF"/>
+					/>
 
-          <Field name="numero_rg" 
-            validate={validacoes.obrigatorio} 
-            type="text" 
-            component={Input} 
+          <Field
+						label="RG"
+						name="numero_rg"
+						type="text"
+						component={Input}
+            validate={validacoes.obrigatorio}
             style={{width: "68%"}}
-            label="RG"/>
+          />
 
-          <Field name="cpf" 
+          <Field
+						label="CPF"
+						name="cpf"
+						type="text"
+						component={Input}
             validate={[
               validacoes.obrigatorio,
               validacoes.cpf
-            ]} 
-            type="text"
-            component={Input} 
+            ]}
             style={{width: "100%"}}
-            label="CPF"
             normalize={normalizacoes.cpf}
-            parse={value => value.replace(/[^0-9]/g, '')}/>
+					/>
 
-          <Field 
-            name="cpfDoResponsavel" 
-            component={Input} 
+          <Field
+						label="CPF do Responsável"
+            name="cpfDoResponsavel"
+            component={Checkbox}
             style={{width: "20%"}}
-            type="checkbox"
-            label="CPF do Responsável"
           />
 
-          {this.props.cpfDoResponsavel ? 
-          <Field 
-            name="nomeDoResponsavel" 
-            component={Input} 
+          {this.props.cpfDoResponsavel ?
+          <Field
+						label="Nome do Responsável"
+            name="nomeDoResponsavel"
+						type="text"
+            component={Input}
             validate={[
               validacoes.obrigatorio,
               validacoes.valorMinimoDeCaracteres(4),
               validacoes.valorMaximoDeCaracteres(100)
-              ]} 
+              ]}
             style={{width: "80%"}}
-            type="text"
-            label="Nome do Responsável"
-          /> : <div className="clearfix breakline"/>}
+          	/> : <div className="clearfix breakline"/>}
 
-          <Field name="telefoneFixo" 
+          <Field
+						label="Telefone Fixo"
+						name="telefoneFixo"
+						type="text"
+						component={Input}
             validate={[
               validacoes.obrigatorio,
               validacoes.telefoneFixo
-            ]} 
-            type="text" 
-            component={Input} 
+            ]}
             style={{width: "49%", marginRight: "2%"}}
-            label="Telefone Fixo"
             normalize={normalizacoes.telefoneFixo}
-            parse={value => value.replace(/[^0-9]/g, '')} 
-            /> 
+          />
 
-          <Field name="telefoneCelular" 
+          <Field
+						label="Telefone Celular"
+						name="telefoneCelular"
+						type="text"
+						component={Input}
             validate={[
               validacoes.obrigatorio,
               validacoes.telefoneCelular
-            ]} 
-            type="text" 
-            component={Input} 
+            ]}
             style={{width: "49%"}}
-            label="Telefone Celular"
             normalize={normalizacoes.telefoneCelular}
-            parse={value => value.replace(/[^0-9]/g, '')} 
           />
-          
-          <Field name="sexo"
-             component={RadioGroup} 
-             label="Sexo"
-             validate={[
-              validacoes.obrigatorio
-             ]} 
-             required={true} 
-             style={{width: "100%"}}
-             options={[
-               { title: 'Masculino', value: 'masculino' },
-               { title: 'Feminino', value: 'feminino' }
-             ]} 
+
+          <Field
+						label="Sexo"
+						name="sexo"
+            component={RadioGroup}
+            validate={[
+            	validacoes.obrigatorio
+            ]}
+						options={[
+          		{ title: 'Masculino', value: 'masculino' },
+              { title: 'Feminino', value: 'feminino' }
+            ]}
+            style={{width: "100%"}}
           />
+
+					<Field
+						label="Data de Nascimento"
+						name="dataDeNascimento"
+            component={DatePicker}
+            validate={[
+            	validacoes.obrigatorio
+            ]}
+            style={{width: "100%"}}
+          />
+
+					<Field
+						label="Endereço"
+						name="endereco"
+						placeholder="Entre seu endereço"
+						component={PlaceField}
+						validate={[
+            	validacoes.obrigatorio
+            ]}
+						style={{width: "100%"}}
+					/>
+
+					<Field
+						label="Escolaridade"
+						name="escolaridade"
+						component={DropDown}
+            opcoes={Escolaridades}
+            validate={validacoes.obrigatorio}
+            style={{width: "30%"}}
+					/>
+
+					<Field
+					 	name='captcharesponse'
+						component={Captcha}
+						validate={validacoes.obrigatorio}
+						style={{width: "100%"}}
+					/>
 
           {this.mostrarAlertas()}
 
-          <div className="clearfix">
+          <div className="clearfix top_space">
             <button type="submit" className={'btn btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Cadastrar</button>
           </div>
         </form>
@@ -200,4 +264,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, actions)(CadastroForm);
-

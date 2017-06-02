@@ -1,0 +1,29 @@
+.autocomplete-container .root {
+  position: 'relative',
+  paddingBottom: '0px',
+}
+
+.autocomplete-container input {
+  display: 'inline-block',
+  width: '100%',
+  padding: '10px',
+}
+
+.autocomplete-container .autocompleteContainer {
+  position: 'absolute',
+  top: '100%',
+  backgroundColor: 'white',
+  border: '1px solid #555555',
+  width: '100%',
+}
+
+.autocomplete-container .autocompleteItem {
+  backgroundColor: '#ffffff',
+  padding: '10px',
+  color: '#555555',
+  cursor: 'pointer',
+}
+
+.autocomplete-container .autocompleteItemActive {
+  backgroundColor: '#fafafa'
+}

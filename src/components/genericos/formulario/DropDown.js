@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
-class DropDown extends Component {
+export default class DropDown extends Component {
 
   static propTypes = {
+		meta: PropTypes.object.isRequired,
     opcoes: PropTypes.array.isRequired,
     input: PropTypes.object.isRequired,
     label: PropTypes.string.isRequired,
@@ -34,5 +35,3 @@ class DropDown extends Component {
     );
   }
 }
-
-export default DropDown;

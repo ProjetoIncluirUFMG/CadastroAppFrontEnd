@@ -1,3 +1,2 @@
-1) Remover Radio button do Input.js
-2) Remover Checkbox do Input.js e criar seu proprio arquivo
-3) Configurar DatePicker
+1) Adicionar chaves no process.env
+2) Adicionar assinatura dos props
