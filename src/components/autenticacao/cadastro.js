@@ -16,7 +16,7 @@ import RadioGroup from '../genericos/formulario/RadioGroup';
 import Checkbox from '../genericos/formulario/Checkbox';
 import { default as DatePicker } from '../genericos/formulario/DatePicker';
 import PlaceField from '../genericos/formulario/PlaceField';
-import Captcha from '../genericos/formulario/Captcha';
+import Captcha from '../genericos/formulario/Captcha/index';
 
 const selector = formValueSelector('cadastro');
 
@@ -195,9 +195,7 @@ class Cadastro extends Component {
 						label="Sexo"
 						name="sexo"
             component={RadioGroup}
-            validate={[
-            	validacoes.obrigatorio
-            ]}
+            validate={validacoes.obrigatorio}
 						options={[
           		{ title: 'Masculino', value: 'masculino' },
               { title: 'Feminino', value: 'feminino' }
@@ -209,9 +207,7 @@ class Cadastro extends Component {
 						label="Data de Nascimento"
 						name="dataDeNascimento"
             component={DatePicker}
-            validate={[
-            	validacoes.obrigatorio
-            ]}
+            validate={validacoes.obrigatorio}
 						maxDate={moment()}
             style={{width: "100%"}}
           />
@@ -221,9 +217,7 @@ class Cadastro extends Component {
 						name="endereco"
 						placeholder="Entre seu endereço"
 						component={PlaceField}
-						validate={[
-            	validacoes.obrigatorio
-            ]}
+						validate={validacoes.obrigatorio}
 						style={{width: "100%"}}
 					/>
 
@@ -239,6 +233,7 @@ class Cadastro extends Component {
 					<Field
 					 	name='captcharesponse'
 						component={Captcha}
+						apiKey="6LepyiMUAAAAAD9ZHsU3hVy6CW4uNRLMPsND6TV7"
 						validate={validacoes.obrigatorio}
 						style={{width: "100%"}}
 					/>

@@ -39,7 +39,7 @@ export default class renderDatePicker extends Component {
 				    showMonthDropdown
 				    showYearDropdown
 				    dropdownMode="select"
-	          placeholder={label}
+	          placeholderText={label}
 	          dateFormat="DD-MM-YYYY"
 	          selected={input.value ? moment(input.value, 'DD-MM-YYYY') : null}
 	          onChange={this.handleChange}

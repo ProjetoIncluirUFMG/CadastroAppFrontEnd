@@ -111,6 +111,15 @@
 
 /* Login Component */
 
+.login .alert-warning.alerta {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.login .btn-space {
+	margin-right: 5px;
+}
+
 .login .top_space {
 	padding-top: 20px;
 }

@@ -30,7 +30,7 @@ class Login extends Component {
     const emProgresso = !valid || pristine || submitting;
 
     return (
-			<div className="cadastro">
+			<div className="login">
         <form onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
 					<Field
 						label="Email"
@@ -62,7 +62,8 @@ class Login extends Component {
 	        {this.mostrarAlertas()}
 
 					<div className="clearfix top_space">
-            <button type="submit" className={'btn btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Login</button>
+            <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Login</button>
+						<button className="btn btn-default">Esqueci minha senha</button>
           </div>
 	      </form>
 			</div>
