@@ -8,28 +8,30 @@ const logoImgSrc = '../../../images/logo-projeto-incluir.png';
 class Cabecalho extends Component {
 
   static propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
+		autenticado: PropTypes.bool,
+
+		match: PropTypes.object.isRequired,
+		location: PropTypes.object.isRequired,
+		history: PropTypes.object.isRequired
   }
 
   constructor() {
     super();
     this.state = {
-      currentLocation: "/"
+      localizacaoAtual: "/"
     }
   }
 
   componentDidMount() {
     this.setState({
-      currentLocation: this.props.location.pathname
+      localizacaoAtual: this.props.location.pathname
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.location !== this.props.location) {
+    if (nextProps.location.pathname !== this.props.location.pathname) {
       this.setState({
-        currentLocation: nextProps.location.pathname
+        localizacaoAtual: nextProps.location.pathname
       });
     }
   }
@@ -42,14 +44,14 @@ class Cabecalho extends Component {
         </li>);
     } else {
       return [
-        <li className="nav-item" key={1}>
+        <li className="nav-item opcao-menu" key={1}>
           <Link className="nav-link" to="/login">
-          {this.state.currentLocation === '/login' ? <b>Login</b> : "Login"}
+          {this.state.localizacaoAtual === '/login' ? <span className="selecionado">Login</span> : <span className="nao-selecionado">Login</span>}
           </Link>
         </li>,
-        <li className="nav-item" key={2}>
+        <li className="nav-item opcao-menu" key={2}>
           <Link className="nav-link" to="/cadastro">
-          {this.state.currentLocation === '/cadastro' ? <b>Cadastro</b> : "Cadastro"}
+          {this.state.localizacaoAtual === '/cadastro' ? <span className="selecionado">Cadastro</span> : <span className="nao-selecionado">Cadastro</span>}
           </Link>
         </li>
       ];

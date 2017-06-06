@@ -45,6 +45,14 @@
   background-color: black;
 }
 
+.cabecalho .opcao-menu .nao-selecionado {
+  font-weight: normal;
+}
+
+.cabecalho .opcao-menu .selecionado {
+  font-weight: bold;
+}
+
 @media (max-width: 768px) {
   .cabecalho .nav.navbar-nav.pull-right {
     float: left!important;

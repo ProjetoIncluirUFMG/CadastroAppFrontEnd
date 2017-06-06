@@ -1,3 +1,9 @@
+require('dotenv').config();
+const Dotenv = require('dotenv-webpack');
+const ReplacePlugin = require('replace-webpack-plugin');
+
+console.log("process.env.GOOGLE_PLACES_API_KEY: ", process.env.GOOGLE_PLACES_API_KEY);
+
 module.exports = {
   entry: [
     './src/index.js'
@@ -8,14 +14,27 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [{
-      exclude: /node_modules/,
-      loader: 'babel-loader'
-    }]
+    loaders: [
+			{
+				test: /\.js$/,
+	      exclude: /node_modules/,
+	      loader: 'babel-loader'
+	    }
+		]
   },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
+	plugins: [
+		new ReplacePlugin({
+      //skip: process.env.NODE_ENV === 'development',
+      entry: '/src/index.html',
+      output: 'index.html',
+      data: {
+        js: '	<script src="https://maps.googleapis.com/maps/api/js?key=' + process.env.GOOGLE_PLACES_API_KEY +'&libraries=places&language=pt-br"></script>'
+      }
+    }),
+		new Dotenv({
+			path: './.env', // Path to .env file (this is the default)
+		})
+	],
   devServer: {
     // Set this as true if you want to access dev server from arbitrary url.
     // This is handy if you are using a html5 router.

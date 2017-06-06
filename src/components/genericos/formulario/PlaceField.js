@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import PlacesAutocomplete from 'react-places-autocomplete';
 
 const AutocompleteItem = ({ formattedSuggestion }) => (
@@ -9,6 +10,14 @@ const AutocompleteItem = ({ formattedSuggestion }) => (
 );
 
 export default class PlaceField extends Component {
+
+	static propTypes = {
+    meta: PropTypes.object.isRequired,
+    input: PropTypes.object.isRequired,
+    label: PropTypes.string.isRequired,
+    placeholder: PropTypes.string.isRequired,
+    style: PropTypes.object.isRequired
+  }
 
 	render() {
 		const { input, label, placeholder, style, meta: { touched, error } } = this.props;

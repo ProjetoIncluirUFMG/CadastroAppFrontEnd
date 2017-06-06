@@ -6,7 +6,10 @@ import * as actions from '../../actions/cursos';
 
 class ListaCursos extends Component {
 
-	static propTypes = { }
+	static propTypes = {
+		listaCursos: PropTypes.array.isRequired,
+		buscarCursos: PropTypes.func.isRequired
+	}
 
 	constructor() {
 		super();
@@ -26,27 +29,16 @@ class ListaCursos extends Component {
 	}
 
 	renderizarListaDeCursos() {
-		const cursos = {};
-
-		this.state.cursos.forEach((curso) => {
-			if (!cursos[curso.id_curso]) {
-				cursos[curso.id_curso] = {
-					id: curso.id_curso,
-					nome: curso.nome_curso,
-					descricao: curso.descricao_curso,
-					disciplinas: []
-				};
-			}
-
-			cursos[curso.id_curso].disciplinas.push({
-				id: curso.id_disciplina,
-				nome: curso.nome_disciplina,
-				ementa: curso.ementa_disciplina
-			});
-		});
+		const cursos = this.state.cursos;
 
 		const listaDeCursos = Object.keys(cursos).map(function(key) {
+
+			console.log("key: ", key);
+
 			const curso = cursos[key];
+
+			console.log("key: ", key);
+			console.log("curso: ", curso);
 
 			return (
 				<span key={curso.id}>
@@ -67,7 +59,7 @@ class ListaCursos extends Component {
 									<a href={"#SubMenu" + disciplina.id}
 										className="list-group-item"
 										data-toggle="collapse"
-										data-parent={"#Menu" + curso.id}>
+										data-parent={"#Menu" + disciplina.id_curso}>
 										{disciplina.nome} <i className="glyphicon glyphicon-chevron-down pull-right"></i>
 									</a>
 									<div className="collapse list-group-submenu" id={"SubMenu" + disciplina.id}>
@@ -80,23 +72,20 @@ class ListaCursos extends Component {
 						})
 					}
 					</div>
-
-		        </span>
+		   </span>
 			);
 		});
 
 		return (
-		<div className="lista_cursos" id="ListaDeCursos">
 			<div className="list-group panel">
 				{listaDeCursos}
 			</div>
-		</div>
 		);
 	}
 
 	render() {
 		return (
-			<div>
+			<div className="lista_cursos" id="ListaDeCursos">
 				{this.renderizarListaDeCursos()}
 			</div>
 		);

@@ -1,6 +1,6 @@
-import { 
-  AUTENTICAR_USUARIO, 
-  DESAUTENTICAR_USUARIO, 
+import {
+  AUTENTICAR_USUARIO,
+  DESAUTENTICAR_USUARIO,
   ERRO_NA_AUTENTICACAO
 } from '../actions/autenticacao/tipos';
 

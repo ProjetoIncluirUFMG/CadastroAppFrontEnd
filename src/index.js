@@ -4,14 +4,18 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
+import createBrowserHistory from 'history/createBrowserHistory'
 
 import App from './components/app';
-import Home from './components/home';
-import Cadastro from './components/autenticacao/cadastro';
-import Login from './components/autenticacao/login';
+import AutenticacaoRequerida from './components/genericos/autenticacao_requerida';
+import Home from './components/views/home';
+import Cadastro from './components/views/autenticacao/cadastro';
+import Login from './components/views/autenticacao/login';
 
 import reducers from './reducers';
 import { AUTENTICAR_USUARIO } from './actions/autenticacao/tipos';
+
+const customHistory = createBrowserHistory();
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
 const store = createStoreWithMiddleware(reducers);
@@ -27,7 +31,7 @@ if (token) {
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>
+    <Router history={customHistory}>
       <App>
         <Route exact={true} path="/" component={Home} />
         <Route path="/cadastro" component={Cadastro} />

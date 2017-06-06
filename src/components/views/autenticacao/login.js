@@ -3,15 +3,29 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
-import * as actions from '../../actions/autenticacao';
-import * as validacoes from '../genericos/formulario/utils/validacoesDeFormulario';
-import Input from '../genericos/formulario/Input';
-import DropDown from '../genericos/formulario/DropDown';
+import * as actions from '../../../actions/autenticacao';
+import * as validacoes from '../../genericos/formulario/utils/validacoesDeFormulario';
+import Input from '../../genericos/formulario/Input';
+import DropDown from '../../genericos/formulario/DropDown';
 
 class Login extends Component {
 
+	static propTypes = {
+		mensagemDeErro: PropTypes.string,
+		loginUsuario: PropTypes.func.isRequired,
+
+		valid: PropTypes.bool.isRequired,
+		handleSubmit: PropTypes.func.isRequired,
+		pristine: PropTypes.bool.isRequired,
+		submitting: PropTypes.bool.isRequired,
+
+		match: PropTypes.object.isRequired,
+		location: PropTypes.object.isRequired,
+		history: PropTypes.object.isRequired
+	}
+
 	submeterFormulario(formProps) {
-    this.props.signupUser(formProps);
+    this.props.loginUsuario(formProps);
   }
 
 	mostrarAlertas() {

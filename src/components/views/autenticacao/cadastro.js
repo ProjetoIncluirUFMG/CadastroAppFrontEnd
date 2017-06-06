@@ -6,17 +6,19 @@ import { formValueSelector } from 'redux-form';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import * as actions from '../../actions/autenticacao';
-import * as validacoes from '../genericos/formulario/utils/validacoesDeFormulario';
-import * as normalizacoes from '../genericos/formulario/utils/normalizacaoDeFormulario';
+import * as acoesAutenticacao from '../../../actions/autenticacao';
+import * as acoesUsuario from '../../../actions/usuario';
 
-import Input from '../genericos/formulario/Input';
-import DropDown from '../genericos/formulario/DropDown';
-import RadioGroup from '../genericos/formulario/RadioGroup';
-import Checkbox from '../genericos/formulario/Checkbox';
-import { default as DatePicker } from '../genericos/formulario/DatePicker';
-import PlaceField from '../genericos/formulario/PlaceField';
-import Captcha from '../genericos/formulario/Captcha/index';
+import * as validacoes from '../../genericos/formulario/utils/validacoesDeFormulario';
+import * as normalizacoes from '../../genericos/formulario/utils/normalizacaoDeFormulario';
+
+import Input from '../../genericos/formulario/Input';
+import DropDown from '../../genericos/formulario/DropDown';
+import RadioGroup from '../../genericos/formulario/RadioGroup';
+import Checkbox from '../../genericos/formulario/Checkbox';
+import { default as DatePicker } from '../../genericos/formulario/DatePicker';
+import PlaceField from '../../genericos/formulario/PlaceField';
+import Captcha from '../../genericos/formulario/Captcha/index';
 
 const selector = formValueSelector('cadastro');
 
@@ -38,9 +40,65 @@ const Escolaridades = [
 
 class Cadastro extends Component {
 
+	static propTypes = {
+		mensagemDeErro: PropTypes.string,
+		usuario: PropTypes.object,
+
+		cpfDoResponsavel: PropTypes.bool,
+		email: PropTypes.string,
+
+		cadastrarUsuario: PropTypes.func.isRequired,
+		buscarUsuario: PropTypes.func.isRequired,
+
+		valid: PropTypes.bool.isRequired,
+		handleSubmit: PropTypes.func.isRequired,
+		pristine: PropTypes.bool.isRequired,
+		submitting: PropTypes.bool.isRequired,
+		change: PropTypes.func.isRequired,
+
+		match: PropTypes.object.isRequired,
+		location: PropTypes.object.isRequired,
+		history: PropTypes.object.isRequired
+	}
+
+	prePreencherFormulario(usuario) {
+		if (usuario.email !== null) this.props.change('email', usuario.email);
+		if (usuario.nome !== null) this.props.change('nome', usuario.nome);
+		// Remover caracteres do RG
+		if (usuario.rg !== null) this.props.change('numero_rg', usuario.rg.replace(/\D/g,''));
+		// Remover caracteres do CPF
+		if (usuario.cpf !== null) this.props.change('cpf', normalizacoes.cpf(usuario.cpf.replace(/\D/g,'')));
+		if (usuario.cpf_responsavel !== null) this.props.change('cpfDoResponsavel', usuario.cpf_responsavel === 1 ? true : false);
+		if (usuario.cpf_responsavel === 1) this.props.change('nomeDoResponsavel', usuario.nome_responsavel);
+		// Remover caracteres do Telefones
+		if (usuario.telefone !== null) this.props.change('telefoneFixo', normalizacoes.telefoneFixo(usuario.telefone));
+		if (usuario.celular !== null) this.props.change('telefoneCelular', normalizacoes.telefoneCelular(usuario.celular));
+		if (usuario.sexo !== null) this.props.change('sexo', String(usuario.sexo));
+		if (usuario.data_nascimento !== null) this.props.change('dataDeNascimento', moment(usuario.data_nascimento).format('DD-MM-YYYY'));
+		if (usuario.endereco !== null && usuario.numero !== null && usuario.bairro !== null && usuario.cidade !== null && usuario.estado !== null) {
+			this.props.change('endereco', `${usuario.endereco}, ${usuario.numero} - ${usuario.bairro}, ${usuario.cidade} - ${usuario.estado}`);
+		}
+		if (usuario.escolaridade !== null) this.props.change('escolaridade', usuario.escolaridade);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.usuario !== nextProps.usuario && nextProps.usuario !== null) {
+			this.prePreencherFormulario(nextProps.usuario);
+		}
+		if (this.props.email !== nextProps.email &&
+			  validacoes.email(nextProps.email) === undefined) {
+			this.props.buscarUsuario(nextProps.email);
+		}
+	}
+
   submeterFormulario(formProps) {
-    this.props.signupUser(formProps);
+		console.log("formProps: ", formProps);
+    this.props.cadastrarUsuario(formProps);
   }
+
+	buscarUsuario(email) {
+		this.props.buscarUsuario(email);
+	}
 
   mostrarAlertas() {
     if (this.props.mensagemDeErro) {
@@ -197,8 +255,8 @@ class Cadastro extends Component {
             component={RadioGroup}
             validate={validacoes.obrigatorio}
 						options={[
-          		{ title: 'Masculino', value: 'masculino' },
-              { title: 'Feminino', value: 'feminino' }
+          		{ title: 'Masculino', value: '0' },
+              { title: 'Feminino', value: '1' }
             ]}
             style={{width: "100%"}}
           />
@@ -231,9 +289,9 @@ class Cadastro extends Component {
 					/>
 
 					<Field
-					 	name='captcharesponse'
+					 	name='captcha'
 						component={Captcha}
-						apiKey="6LepyiMUAAAAAD9ZHsU3hVy6CW4uNRLMPsND6TV7"
+						apiKey={process.env.GOOGLE_RECAPTCHA_V2_KEY}
 						validate={validacoes.obrigatorio}
 						style={{width: "100%"}}
 					/>
@@ -256,8 +314,13 @@ const CadastroForm = reduxForm({
 function mapStateToProps(state) {
   return {
     cpfDoResponsavel: selector(state, 'cpfDoResponsavel'),
-    mensagemDeErro: state.autenticacao.erro
+		email: selector(state, 'email'),
+    mensagemDeErro: state.autenticacao.erro,
+		usuario: state.usuario.encontrado
   };
 }
+
+const actions = {};
+Object.assign(actions, acoesUsuario, acoesAutenticacao);
 
 export default connect(mapStateToProps, actions)(CadastroForm);

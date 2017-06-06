@@ -1,1 +1,1 @@
-export const API_URL = 'http://local-api.projetoincluir.com';
+export const API_URL = process.env.API_URL;

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-import { 
-  AUTENTICAR_USUARIO, 
-  DESAUTENTICAR_USUARIO, 
+import {
+  AUTENTICAR_USUARIO,
+  DESAUTENTICAR_USUARIO,
   ERRO_NA_AUTENTICACAO
-} from './tipos'; 
+} from './tipos';
 
 import {
   API_URL
@@ -16,15 +16,15 @@ export function signoutUser() {
   return { tipo: DESAUTENTICAR_USUARIO };
 };
 
-export function signinUser({email, password, history}) {
+export function cadastrarUsuario({email, password, history}) {
 
-  return function(dispatch) {
+	return function(dispatch) {
 
     axios.post(`${API_URL}/signin`, { email, password })
       .then(response => {
 
-        dispatch({ 
-          type: AUTENTICAR_USUARIO 
+        dispatch({
+          type: AUTENTICAR_USUARIO
         });
 
         localStorage.setItem('token', response.data.token);
@@ -38,15 +38,15 @@ export function signinUser({email, password, history}) {
 
 }
 
-export function signupUser({email, password}) {
+export function loginUsuario({email, password}) {
 
   return function(dispatch) {
 
     axios.post(`${API_URL}/signup`, { email, password })
       .then(response => {
 
-        dispatch({ 
-          type: AUTENTICAR_USUARIO 
+        dispatch({
+          type: AUTENTICAR_USUARIO
         });
 
         localStorage.setItem('token', response.data.token);

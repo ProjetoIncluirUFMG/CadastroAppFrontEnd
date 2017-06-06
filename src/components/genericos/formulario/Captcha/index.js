@@ -13,7 +13,7 @@ export default class Captcha extends Component {
 
 	render() {
 		const { input, style, apiKey } = this.props;
-		console.log("apiKey: ", apiKey);
+		
 		return (
 			<div className="pull-left" style={style}>
 				<ReCAPTCHA

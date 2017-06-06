@@ -1,5 +1,2 @@
-1) Adicionar chaves no process.env
-2) Adicionar assinatura dos props
 3) Fazer pre-load de usuario atraves do email do usuario
 4) Cadastrar um usuario
-5) Formatar campo de data (bootstrap)

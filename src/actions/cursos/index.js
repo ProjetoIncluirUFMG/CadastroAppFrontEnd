@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { 
+import {
   BUSCAR_LISTA_DE_CURSOS,
   ERRO_NOS_CURSOS
-} from './tipos'; 
+} from './tipos';
 
 import {
   API_URL
@@ -12,10 +12,10 @@ import {
 export function buscarCursos() {
 
   return function(dispatch) {
-    axios.get(`${API_URL}/cursos`)
+    axios.get(`${API_URL}/curso`)
       .then(resposta => {
 
-        dispatch({ 
+        dispatch({
           type: BUSCAR_LISTA_DE_CURSOS,
           payload: resposta.data
         });

@@ -15,7 +15,12 @@ export default class Checkbox extends Component {
 
     return (
       <div className="pull-left" style={style}>
-        <label className="checkbox-inline"><input {...input} type={"checkbox"} /><b>{label}</b>
+        <label className="checkbox-inline">
+				<input
+					{...input}
+					type={"checkbox"}
+					checked={input.value === true}
+				/><b>{label}</b>
           {touched && ((error || warning) && <div className="alert alert-warning alerta">{error || warning}</div>)}
         </label>
       </div>

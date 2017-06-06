@@ -26,14 +26,14 @@ export const telefoneFixo = value => {
 
   const somenteNumeros = value.replace(/[^\d]/g, '');
 
-  if (somenteNumeros.length <= 2) {
+  if (somenteNumeros.length <= 3) {
     return `(${somenteNumeros})`;
   }
-  if (somenteNumeros.length <= 6) {
-    return `(${somenteNumeros.slice(0, 2)}) ${somenteNumeros.slice(2, 6)}`
+  if (somenteNumeros.length <= 7) {
+    return `(${somenteNumeros.slice(0, 3)}) ${somenteNumeros.slice(3, 7)}`
   }
-  if (somenteNumeros.length <= 10) {
-    return `(${somenteNumeros.slice(0, 2)}) ${somenteNumeros.slice(2, 6)}-${somenteNumeros.slice(6, 10)}`
+  if (somenteNumeros.length <= 11) {
+    return `(${somenteNumeros.slice(0, 3)}) ${somenteNumeros.slice(3, 7)}-${somenteNumeros.slice(7, 11)}`
   }
 }
 
@@ -44,13 +44,13 @@ export const telefoneCelular = value => {
 
   const somenteNumeros = value.replace(/[^\d]/g, '');
 
-  if (somenteNumeros.length <= 2) {
+  if (somenteNumeros.length <= 3) {
     return `(${somenteNumeros})`;
   }
-  if (somenteNumeros.length <= 7) {
-    return `(${somenteNumeros.slice(0, 2)}) ${somenteNumeros.slice(2, 7)}`
+  if (somenteNumeros.length <= 8) {
+    return `(${somenteNumeros.slice(0, 3)}) ${somenteNumeros.slice(3, 8)}`
   }
-  if (somenteNumeros.length <= 11) {
-    return `(${somenteNumeros.slice(0, 2)}) ${somenteNumeros.slice(2, 7)}-${somenteNumeros.slice(7, 11)}`
+  if (somenteNumeros.length <= 12) {
+    return `(${somenteNumeros.slice(0, 3)}) ${somenteNumeros.slice(3, 8)}-${somenteNumeros.slice(8, 12)}`
   }
 }

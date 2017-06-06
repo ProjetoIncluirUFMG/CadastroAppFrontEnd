@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
-import ListaCursos from './genericos/lista_cursos';
+import ListaCursos from '../genericos/lista_cursos';
 
 class Home extends Component {
 
-	static propTypes = { }
+	static propTypes = {
+		match: PropTypes.object.isRequired,
+		location: PropTypes.object.isRequired,
+		history: PropTypes.object.isRequired
+	}
 
 	renderizarTextoIntrodutorio() {
 		return (

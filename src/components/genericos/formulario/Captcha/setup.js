@@ -3,5 +3,4 @@ window.recaptchaOptions = {
   lang: 'pt-BR'
 };
 
-
 export default window.recaptchaOptions;
