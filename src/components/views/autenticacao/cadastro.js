@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { geocodeByAddress } from 'react-places-autocomplete';
 
 import * as acoesAutenticacao from '../../../actions/autenticacao';
 import * as acoesUsuario from '../../../actions/usuario';
@@ -66,11 +67,9 @@ class Cadastro extends Component {
 		if (usuario.nome !== null) this.props.change('nome', usuario.nome);
 		// Remover caracteres do RG
 		if (usuario.rg !== null) this.props.change('numero_rg', usuario.rg.replace(/\D/g,''));
-		// Remover caracteres do CPF
-		if (usuario.cpf !== null) this.props.change('cpf', normalizacoes.cpf(usuario.cpf.replace(/\D/g,'')));
+		if (usuario.cpf !== null) this.props.change('cpf', normalizacoes.cpf(usuario.cpf));
 		if (usuario.cpf_responsavel !== null) this.props.change('cpfDoResponsavel', usuario.cpf_responsavel === 1 ? true : false);
 		if (usuario.cpf_responsavel === 1) this.props.change('nomeDoResponsavel', usuario.nome_responsavel);
-		// Remover caracteres do Telefones
 		if (usuario.telefone !== null) this.props.change('telefoneFixo', normalizacoes.telefoneFixo(usuario.telefone));
 		if (usuario.celular !== null) this.props.change('telefoneCelular', normalizacoes.telefoneCelular(usuario.celular));
 		if (usuario.sexo !== null) this.props.change('sexo', String(usuario.sexo));
@@ -78,6 +77,7 @@ class Cadastro extends Component {
 		if (usuario.endereco !== null && usuario.numero !== null && usuario.bairro !== null && usuario.cidade !== null && usuario.estado !== null) {
 			this.props.change('endereco', `${usuario.endereco}, ${usuario.numero} - ${usuario.bairro}, ${usuario.cidade} - ${usuario.estado}`);
 		}
+		if (usuario.complemento !== null) this.props.change('complemento', usuario.complemento);
 		if (usuario.escolaridade !== null) this.props.change('escolaridade', usuario.escolaridade);
 	}
 
@@ -93,6 +93,11 @@ class Cadastro extends Component {
 
   submeterFormulario(formProps) {
 		console.log("formProps: ", formProps);
+		geocodeByAddress(formProps.endereco)
+      .then(results => {
+				console.log("Results: ", results);
+
+			}).catch(error => console.error('Error', error))
     this.props.cadastrarUsuario(formProps);
   }
 
@@ -276,7 +281,17 @@ class Cadastro extends Component {
 						placeholder="Entre seu endereço"
 						component={PlaceField}
 						validate={validacoes.obrigatorio}
-						style={{width: "100%"}}
+						style={{width: "60%", marginRight: "2%"}}
+					/>
+
+					<Field
+						label="Complemento"
+						name="complemento"
+						type="text"
+						placeholder="Complemento"
+						component={Input}
+						validate={validacoes.obrigatorio}
+						style={{width: "38%"}}
 					/>
 
 					<Field
@@ -285,7 +300,7 @@ class Cadastro extends Component {
 						component={DropDown}
             opcoes={Escolaridades}
             validate={validacoes.obrigatorio}
-            style={{width: "30%"}}
+            style={{width: "40%"}}
 					/>
 
 					<Field
