@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { geocodeByAddress } from 'react-places-autocomplete';
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 import * as acoesAutenticacao from '../../../actions/autenticacao';
 import * as acoesUsuario from '../../../actions/usuario';
@@ -62,13 +62,20 @@ class Cadastro extends Component {
 		history: PropTypes.object.isRequired
 	}
 
+	constructor() {
+		super();
+		this.state = {
+			mensagemDeErro: null
+		};
+	}
+
 	prePreencherFormulario(usuario) {
 		if (usuario.email !== null) this.props.change('email', usuario.email);
-		if (usuario.nome !== null) this.props.change('nome', usuario.nome);
+		if (usuario.nome !== null) this.props.change('nome', usuario.nome_aluno);
 		// Remover caracteres do RG
 		if (usuario.rg !== null) this.props.change('numero_rg', usuario.rg.replace(/\D/g,''));
 		if (usuario.cpf !== null) this.props.change('cpf', normalizacoes.cpf(usuario.cpf));
-		if (usuario.cpf_responsavel !== null) this.props.change('cpfDoResponsavel', usuario.cpf_responsavel === 1 ? true : false);
+		if (usuario.cpf_responsavel !== null) this.props.change('cpfDoResponsavel', usuario.is_cpf_responsavel === 1 ? true : false);
 		if (usuario.cpf_responsavel === 1) this.props.change('nomeDoResponsavel', usuario.nome_responsavel);
 		if (usuario.telefone !== null) this.props.change('telefoneFixo', normalizacoes.telefoneFixo(usuario.telefone));
 		if (usuario.celular !== null) this.props.change('telefoneCelular', normalizacoes.telefoneCelular(usuario.celular));
@@ -82,9 +89,17 @@ class Cadastro extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (this.props.usuario !== nextProps.usuario && nextProps.usuario !== null) {
+		if (this.props.mensagemDeErro !== nextProps.mensagemDeErro) {
+			this.setState({
+				mensagemDeErro: nextProps.mensagemDeErro
+			});
+		}
+
+		if (this.props.usuario !== nextProps.usuario &&
+			  nextProps.usuario !== null) {
 			this.prePreencherFormulario(nextProps.usuario);
 		}
+
 		if (this.props.email !== nextProps.email &&
 			  validacoes.email(nextProps.email) === undefined) {
 			this.props.buscarUsuario(nextProps.email);
@@ -93,12 +108,32 @@ class Cadastro extends Component {
 
   submeterFormulario(formProps) {
 		console.log("formProps: ", formProps);
+
+		let googleLocation = null;
+
 		geocodeByAddress(formProps.endereco)
       .then(results => {
-				console.log("Results: ", results);
+				googleLocation = results[0];
 
-			}).catch(error => console.error('Error', error))
-    this.props.cadastrarUsuario(formProps);
+				if (googleLocation) {
+					return getLatLng(googleLocation);
+				} else {
+					throw new Error();
+				}
+
+			})
+			.then(location => {
+
+				formProps.googleLocation = googleLocation;
+				formProps.googleLocation.lat = location.lat;
+				formProps.googleLocation.lng = location.lng;
+				this.props.cadastrarUsuario(formProps);
+
+			}).catch(error => {
+				this.setState({
+					mensagemDeErro: 'Endereço inválido, limpe o campo e preencha novamente!'
+				});
+			});
   }
 
 	buscarUsuario(email) {
@@ -106,11 +141,14 @@ class Cadastro extends Component {
 	}
 
   mostrarAlertas() {
-    if (this.props.mensagemDeErro) {
+    if (this.state.mensagemDeErro) {
       return (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {this.props.mensagemDeErro}
-        </div>
+				<div>
+					<br />
+	        <div className="erro pull-left alert alert-danger">
+	          <strong>Oops!</strong> {this.state.mensagemDeErro}
+	        </div>
+				</div>
       );
     }
   }
@@ -335,7 +373,6 @@ function mapStateToProps(state) {
   };
 }
 
-const actions = {};
-Object.assign(actions, acoesUsuario, acoesAutenticacao);
+const actions = Object.assign({}, acoesUsuario, acoesAutenticacao);
 
 export default connect(mapStateToProps, actions)(CadastroForm);

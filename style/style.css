@@ -117,6 +117,12 @@
 	padding-top: 20px;
 }
 
+.cadastro .erro {
+	margin-bottom: 0px;
+	margin-top: 15px;
+	width: 100%;
+}
+
 /* Login Component */
 
 .login .alert-warning.alerta {

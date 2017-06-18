@@ -1,10 +1,10 @@
-import { 
+import {
 	BUSCAR_LISTA_DE_CURSOS,
 	ERRO_NOS_CURSOS
 } from '../actions/cursos/tipos';
 
 const INITIAL_STATE = {
-  lista: [],
+  lista: {},
   erro: null
 };
 

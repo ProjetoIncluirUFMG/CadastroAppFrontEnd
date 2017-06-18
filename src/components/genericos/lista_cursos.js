@@ -7,39 +7,20 @@ import * as actions from '../../actions/cursos';
 class ListaCursos extends Component {
 
 	static propTypes = {
-		listaCursos: PropTypes.array.isRequired,
+		listaCursos: PropTypes.object.isRequired,
 		buscarCursos: PropTypes.func.isRequired
-	}
-
-	constructor() {
-		super();
-		this.state = {
-			cursos: []
-		};
 	}
 
 	componentWillMount() {
 		this.props.buscarCursos();
 	}
 
-	componentWillReceiveProps(nextProps) {
-		this.setState({
-			cursos: nextProps.listaCursos
-		});
-	}
-
 	renderizarListaDeCursos() {
-		const cursos = this.state.cursos;
+		const cursos = this.props.listaCursos;
 
 		const listaDeCursos = Object.keys(cursos).map(function(key) {
 
-			console.log("key: ", key);
-
 			const curso = cursos[key];
-
-			console.log("key: ", key);
-			console.log("curso: ", curso);
-
 			return (
 				<span key={curso.id}>
 					<a href={"#Menu" + curso.id}

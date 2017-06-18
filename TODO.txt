@@ -1,5 +1,8 @@
-1) Carregar geo informacao do usuario corretamente
-2) Criar sql para criar nova coluna de senha (incluir passport)
+1) Update usuarios ja existentes no cadastro
+2) Cadastrar novos usuarios (integrar bcrypt)
+3) Integrar Local stragery para autenticacao
+4) Integrar login jwt
+3) Incluir passport
 3) Fazer o update do usuario
 4) Programar login do usuario
 5) Programar esqueci minha senha
