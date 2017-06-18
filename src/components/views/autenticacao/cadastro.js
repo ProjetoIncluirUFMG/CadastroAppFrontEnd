@@ -45,7 +45,7 @@ class Cadastro extends Component {
 		mensagemDeErro: PropTypes.string,
 		usuario: PropTypes.object,
 
-		cpfDoResponsavel: PropTypes.bool,
+		is_cpf_responsavel: PropTypes.bool,
 		email: PropTypes.string,
 
 		cadastrarUsuario: PropTypes.func.isRequired,
@@ -70,19 +70,23 @@ class Cadastro extends Component {
 	}
 
 	prePreencherFormulario(usuario) {
+    console.log("usuario: ", usuario);
+
 		if (usuario.email !== null) this.props.change('email', usuario.email);
-		if (usuario.nome !== null) this.props.change('nome', usuario.nome_aluno);
+		if (usuario.nome_aluno !== null) this.props.change('nome_aluno', usuario.nome_aluno);
 		// Remover caracteres do RG
 		if (usuario.rg !== null) this.props.change('numero_rg', usuario.rg.replace(/\D/g,''));
+    // Remover numeros do RG
+    if (usuario.rg !== null) this.props.change('uf_rg', usuario.rg.replace(/[^a-zA-Z]+/,''));
 		if (usuario.cpf !== null) this.props.change('cpf', normalizacoes.cpf(usuario.cpf));
-		if (usuario.cpf_responsavel !== null) this.props.change('cpfDoResponsavel', usuario.is_cpf_responsavel === 1 ? true : false);
-		if (usuario.cpf_responsavel === 1) this.props.change('nomeDoResponsavel', usuario.nome_responsavel);
-		if (usuario.telefone !== null) this.props.change('telefoneFixo', normalizacoes.telefoneFixo(usuario.telefone));
-		if (usuario.celular !== null) this.props.change('telefoneCelular', normalizacoes.telefoneCelular(usuario.celular));
+		if (usuario.is_cpf_responsavel !== null) this.props.change('is_cpf_responsavel', usuario.is_cpf_responsavel === 1 ? true : false);
+		if (usuario.is_cpf_responsavel === 1) this.props.change('nome_responsavel', usuario.nome_responsavel);
+		if (usuario.telefone !== null) this.props.change('telefone', normalizacoes.telefoneFixo(usuario.telefone));
+		if (usuario.celular !== null) this.props.change('celular', normalizacoes.telefoneCelular(usuario.celular));
 		if (usuario.sexo !== null) this.props.change('sexo', String(usuario.sexo));
-		if (usuario.data_nascimento !== null) this.props.change('dataDeNascimento', moment(usuario.data_nascimento).format('DD-MM-YYYY'));
+		if (usuario.data_nascimento !== null) this.props.change('data_nascimento', moment(usuario.data_nascimento).format('DD-MM-YYYY'));
 		if (usuario.endereco !== null && usuario.numero !== null && usuario.bairro !== null && usuario.cidade !== null && usuario.estado !== null) {
-			this.props.change('endereco', `${usuario.endereco}, ${usuario.numero} - ${usuario.bairro}, ${usuario.cidade} - ${usuario.estado}`);
+			this.props.change('endereco_google', `${usuario.endereco}, ${usuario.numero} - ${usuario.bairro}, ${usuario.cidade} - ${usuario.estado}`);
 		}
 		if (usuario.complemento !== null) this.props.change('complemento', usuario.complemento);
 		if (usuario.escolaridade !== null) this.props.change('escolaridade', usuario.escolaridade);
@@ -111,7 +115,7 @@ class Cadastro extends Component {
 
 		let googleLocation = null;
 
-		geocodeByAddress(formProps.endereco)
+		geocodeByAddress(formProps.endereco_google)
       .then(results => {
 				googleLocation = results[0];
 
@@ -203,7 +207,7 @@ class Cadastro extends Component {
 
           <Field
 						label="Nome"
-						name="nome"
+						name="nome_aluno"
 						type="text"
 						component={Input}
             validate={[
@@ -247,15 +251,15 @@ class Cadastro extends Component {
 
           <Field
 						label="CPF do Responsável"
-            name="cpfDoResponsavel"
+            name="is_cpf_responsavel"
             component={Checkbox}
             style={{width: "20%"}}
           />
 
-          {this.props.cpfDoResponsavel ?
+          {this.props.is_cpf_responsavel ?
           <Field
 						label="Nome do Responsável"
-            name="nomeDoResponsavel"
+            name="nome_responsavel"
 						type="text"
             component={Input}
             validate={[
@@ -268,7 +272,7 @@ class Cadastro extends Component {
 
           <Field
 						label="Telefone Fixo"
-						name="telefoneFixo"
+						name="telefone"
 						type="text"
 						component={Input}
             validate={[
@@ -281,7 +285,7 @@ class Cadastro extends Component {
 
           <Field
 						label="Telefone Celular"
-						name="telefoneCelular"
+						name="celular"
 						type="text"
 						component={Input}
             validate={[
@@ -306,7 +310,7 @@ class Cadastro extends Component {
 
 					<Field
 						label="Data de Nascimento"
-						name="dataDeNascimento"
+						name="data_nascimento"
             component={DatePicker}
             validate={validacoes.obrigatorio}
 						maxDate={moment()}
@@ -315,7 +319,7 @@ class Cadastro extends Component {
 
 					<Field
 						label="Endereço"
-						name="endereco"
+						name="endereco_google"
 						placeholder="Entre seu endereço"
 						component={PlaceField}
 						validate={validacoes.obrigatorio}
@@ -366,7 +370,7 @@ const CadastroForm = reduxForm({
 
 function mapStateToProps(state) {
   return {
-    cpfDoResponsavel: selector(state, 'cpfDoResponsavel'),
+    is_cpf_responsavel: selector(state, 'is_cpf_responsavel'),
 		email: selector(state, 'email'),
     mensagemDeErro: state.autenticacao.erro,
 		usuario: state.usuario.encontrado

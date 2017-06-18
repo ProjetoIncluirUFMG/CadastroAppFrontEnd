@@ -12,7 +12,7 @@ import {
 export function buscarCursos() {
 
   return function(dispatch) {
-    axios.get(`${API_URL}/curso`)
+    axios.get(`${API_URL}/cursos`)
       .then(resposta => {
 
         dispatch({

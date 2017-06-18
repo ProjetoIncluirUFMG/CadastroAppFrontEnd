@@ -4,7 +4,7 @@ import {
 } from '../actions/cursos/tipos';
 
 const INITIAL_STATE = {
-  lista: {},
+  lista: [],
   erro: null
 };
 

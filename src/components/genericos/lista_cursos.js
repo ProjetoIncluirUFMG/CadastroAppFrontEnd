@@ -7,7 +7,7 @@ import * as actions from '../../actions/cursos';
 class ListaCursos extends Component {
 
 	static propTypes = {
-		listaCursos: PropTypes.object.isRequired,
+		listaCursos: PropTypes.array.isRequired,
 		buscarCursos: PropTypes.func.isRequired
 	}
 
@@ -18,34 +18,32 @@ class ListaCursos extends Component {
 	renderizarListaDeCursos() {
 		const cursos = this.props.listaCursos;
 
-		const listaDeCursos = Object.keys(cursos).map(function(key) {
-
-			const curso = cursos[key];
+		const listaDeCursos = cursos.map(function(curso) {
 			return (
-				<span key={curso.id}>
-					<a href={"#Menu" + curso.id}
+				<span key={curso.id_curso}>
+					<a href={"#Menu" + curso.id_curso}
 					   className="list-group-item list-group-item-warning"
 					   data-toggle="collapse"
 					   data-parent="#ListaDeCursos"
 					>
-						<b>{curso.nome}</b>
+						<b>{curso.nome_curso}</b>
 						<span className="glyphicon glyphicon-chevron-down pull-right"></span>
 					</a>
 					<div className="collapse"
-					 id={"Menu" + curso.id}>
+					 id={"Menu" + curso.id_curso}>
 					{
 						curso.disciplinas.map(disciplina => {
 							return (
-								<span key={disciplina.id}>
-									<a href={"#SubMenu" + disciplina.id}
+								<span key={disciplina.id_disciplina}>
+									<a href={"#SubMenu" + disciplina.id_disciplina}
 										className="list-group-item"
 										data-toggle="collapse"
 										data-parent={"#Menu" + disciplina.id_curso}>
-										{disciplina.nome} <i className="glyphicon glyphicon-chevron-down pull-right"></i>
+										{disciplina.nome_disciplina} <i className="glyphicon glyphicon-chevron-down pull-right"></i>
 									</a>
-									<div className="collapse list-group-submenu" id={"SubMenu" + disciplina.id}>
-										<a href="#" className="list-group-item" data-parent={"#SubMenu" + disciplina.id}>
-										{disciplina.ementa ? disciplina.ementa : "Nenhuma ementa encontrada."}
+									<div className="collapse list-group-submenu" id={"SubMenu" + disciplina.id_disciplina}>
+										<a href="#" className="list-group-item" data-parent={"#SubMenu" + disciplina.id_disciplina}>
+										{disciplina.ementa_disciplina ? disciplina.ementa_disciplina : "Nenhuma ementa encontrada."}
 										</a>
 									</div>
 								</span>

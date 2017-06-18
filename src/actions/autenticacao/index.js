@@ -16,11 +16,11 @@ export function signoutUser() {
   return { tipo: DESAUTENTICAR_USUARIO };
 };
 
-export function cadastrarUsuario({email, password, history}) {
+export function cadastrarUsuario(usuario) {
 
 	return function(dispatch) {
 
-    axios.post(`${API_URL}/signin`, { email, password })
+    axios.post(`${API_URL}/usuario/cadastrar`, usuario)
       .then(response => {
 
         dispatch({
@@ -31,7 +31,7 @@ export function cadastrarUsuario({email, password, history}) {
 
       })
       .catch(() => {
-        dispatch(erro('Bad login info'));
+        dispatch(erro('Falha duarante o cadastro!'));
       });
 
   }
