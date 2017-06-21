@@ -127,10 +127,9 @@ class Cadastro extends Component {
 
 			})
 			.then(location => {
-
-				formProps.googleLocation = googleLocation;
-				formProps.googleLocation.lat = location.lat;
-				formProps.googleLocation.lng = location.lng;
+				googleLocation.lat = location.lat;
+				googleLocation.lng = location.lng;
+        formProps.google_places_json = JSON.stringify(googleLocation);
 				this.props.cadastrarUsuario(formProps);
 
 			}).catch(error => {

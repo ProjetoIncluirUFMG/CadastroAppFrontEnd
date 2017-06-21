@@ -20,8 +20,12 @@ export function cadastrarUsuario(usuario) {
 
 	return function(dispatch) {
 
+    console.log(`${API_URL}/usuario/cadastrar`);
+
     axios.post(`${API_URL}/usuario/cadastrar`, usuario)
       .then(response => {
+
+        console.log("response.data: ", response.data);
 
         dispatch({
           type: AUTENTICAR_USUARIO

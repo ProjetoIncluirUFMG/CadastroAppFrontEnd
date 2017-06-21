@@ -14,6 +14,10 @@ export function buscarUsuario(email) {
 		axios.get(`${API_URL}/usuario`, { params: { email } })
       .then(response => {
 
+        if (response.data === '') {
+          response.data = null;
+        }
+
         dispatch({
           type: BUSCAR_USUARIO,
 					payload: response.data
