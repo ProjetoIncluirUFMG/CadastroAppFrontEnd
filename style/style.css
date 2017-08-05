@@ -123,6 +123,27 @@
 	width: 100%;
 }
 
+.cadastro .carregando {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 1px solid #ccc;
+  background-color: #f3f3f3;
+}
+
+.cadastro .carregando div {
+  margin-left: 15%;
+}
+
+.ReactModal__Content .cadastro {
+  text-align:center;
+}
+
+.ReactModal__Content .cadastro .botao {
+  margin: 0 auto;
+}
+
 /* Login Component */
 
 .login .alert-warning.alerta {
@@ -140,4 +161,94 @@
 
 .login .clearfix {
   clear: left;
+}
+
+.login .erro {
+	margin-bottom: 0px;
+	margin-top: 15px;
+	width: 100%;
+}
+
+/* Esqueci minha senha Component */
+
+.esqueci_senha .alert-warning.alerta {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.esqueci_senha .top_space {
+	padding-top: 20px;
+}
+
+.esqueci_senha .clearfix {
+  clear: left;
+}
+
+.esqueci_senha .erro {
+	margin-bottom: 0px;
+	margin-top: 15px;
+	width: 100%;
+}
+
+.esqueci_senha .carregando {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 1px solid #ccc;
+  background-color: #f3f3f3;
+}
+
+.esqueci_senha .carregando div {
+  margin-left: 15%;
+}
+
+.ReactModal__Content .esqueci_senha {
+  text-align:center;
+}
+
+.ReactModal__Content .esqueci_senha .botao {
+  margin: 0 auto;
+}
+
+/* Resetar senha Component */
+
+.reset_senha .alert-warning.alerta {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.reset_senha .top_space {
+	padding-top: 20px;
+}
+
+.reset_senha .clearfix {
+  clear: left;
+}
+
+.reset_senha .erro {
+	margin-bottom: 0px;
+	margin-top: 15px;
+	width: 100%;
+}
+
+.reset_senha .carregando {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 1px solid #ccc;
+  background-color: #f3f3f3;
+}
+
+.reset_senha .carregando div {
+  margin-left: 15%;
+}
+
+.ReactModal__Content .reset_senha {
+  text-align:center;
+}
+
+.ReactModal__Content .reset_senha .botao {
+  margin: 0 auto;
 }

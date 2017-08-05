@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
 import * as actions from '../../../actions/autenticacao';
+
 import * as validacoes from '../../genericos/formulario/utils/validacoesDeFormulario';
 import Input from '../../genericos/formulario/Input';
 import DropDown from '../../genericos/formulario/DropDown';
@@ -13,6 +14,7 @@ class Login extends Component {
 	static propTypes = {
 		mensagemDeErro: PropTypes.string,
 		loginUsuario: PropTypes.func.isRequired,
+    	usuarioAutenticado: PropTypes.bool,
 
 		valid: PropTypes.bool.isRequired,
 		handleSubmit: PropTypes.func.isRequired,
@@ -28,12 +30,20 @@ class Login extends Component {
     this.props.loginUsuario(formProps);
   }
 
+  componentWillReceiveProps(nextProps) {
+    // Redirecionar usuario para pagina principal depois do login
+    if (nextProps.usuarioAutenticado) this.props.history.push('/');
+  }
+
 	mostrarAlertas() {
     if (this.props.mensagemDeErro) {
       return (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {this.props.mensagemDeErro}
-        </div>
+        <div>
+					<br />
+	        <div className="erro pull-left alert alert-danger">
+	          <strong>Oops!</strong> {this.props.mensagemDeErro}
+	        </div>
+				</div>
       );
     }
   }
@@ -71,13 +81,11 @@ class Login extends Component {
 						style={{width: "100%"}}
 					/>
 
-	        <br />
-
 	        {this.mostrarAlertas()}
 
 					<div className="clearfix top_space">
             <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Login</button>
-						<button className="btn btn-default">Esqueci minha senha</button>
+						<button className="btn btn-default" onClick={() => this.props.history.push('/esqueciSenha')}>Esqueci minha senha</button>
           </div>
 	      </form>
 			</div>
@@ -90,7 +98,10 @@ const LoginForm = reduxForm({
 })(Login)
 
 function mapStateToProps(state) {
-  return { mensagemDeErro: state.autenticacao.erro };
+  return {
+    mensagemDeErro: state.autenticacao.erro,
+    usuarioAutenticado: state.autenticacao.autenticado,
+  };
 }
 
 export default connect(mapStateToProps, actions)(LoginForm);

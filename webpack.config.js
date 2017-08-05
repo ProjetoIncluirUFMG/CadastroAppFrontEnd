@@ -2,8 +2,6 @@ require('dotenv').config();
 const Dotenv = require('dotenv-webpack');
 const ReplacePlugin = require('replace-webpack-plugin');
 
-console.log("process.env.GOOGLE_PLACES_API_KEY: ", process.env.GOOGLE_PLACES_API_KEY);
-
 module.exports = {
   entry: [
     './src/index.js'

@@ -3,73 +3,101 @@ import axios from 'axios';
 import {
   AUTENTICAR_USUARIO,
   DESAUTENTICAR_USUARIO,
-  ERRO_NA_AUTENTICACAO
+  ERRO_NA_AUTENTICACAO,
+
+  RECUPERAR_SENHA,
+  ERRO_NA_RECUPERACAO_DE_SENHA,
+  RESETAR_RECUPERACAO_DE_SENHA,
+
+  RESETAR_SENHA,
+  ERRO_NO_RESET_DE_SENHA,
+  RESETAR_RESET_DE_SENHA,
 } from './tipos';
 
 import {
   API_URL
 } from '../api';
 
-export function signoutUser() {
-  localStorage.removeItem('token');
+export function logoutUsuario() {
+  localStorage.removeItem('piToken');
 
-  return { tipo: DESAUTENTICAR_USUARIO };
+  return {
+    type: DESAUTENTICAR_USUARIO
+  };
 };
 
-export function cadastrarUsuario(usuario) {
-
-	return function(dispatch) {
-
-    console.log(`${API_URL}/usuario/cadastrar`);
-
-    axios.post(`${API_URL}/usuario/cadastrar`, usuario)
-      .then(response => {
-
-        console.log("response.data: ", response.data);
-
-        dispatch({
-          type: AUTENTICAR_USUARIO
-        });
-
-        localStorage.setItem('token', response.data.token);
-
-      })
-      .catch(() => {
-        dispatch(erro('Falha duarante o cadastro!'));
-      });
-
-  }
-
-}
-
-export function loginUsuario({email, password}) {
+export function loginUsuario({email, senha}) {
 
   return function(dispatch) {
 
-    axios.post(`${API_URL}/signup`, { email, password })
+    axios.post(`${API_URL}/usuario/login`, { email, senha })
       .then(response => {
 
         dispatch({
           type: AUTENTICAR_USUARIO
         });
 
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('piToken', response.data.jwt);
       })
       .catch(response => {
-        // If request is bad...
-        // - Show an error to the user
-        if (response && response.data && response.data.error) {
-          dispatch(authError(response.data.error));
-        } else {
-          dispatch(erro('Bad signup info'));
-        }
+        dispatch({
+          type: ERRO_NA_AUTENTICACAO,
+          payload: "Email ou senha inválido, tente novamente!"
+        });
       });
   }
 }
 
-export function erro(error) {
-  return {
-    type: ERRO_NA_AUTENTICACAO,
-    payload: error
-  };
+export function recuperarSenha({ email }) {
+
+  return function(dispatch) {
+
+    axios.post(`${API_URL}/usuario/recuperarSenha`, { email })
+      .then(response => {
+        dispatch({
+          type: RECUPERAR_SENHA
+        });
+      })
+      .catch(response => {
+        dispatch({
+          type: ERRO_NA_RECUPERACAO_DE_SENHA,
+          payload: response.response.data.erro
+        });
+      });
+  }
+}
+
+export function resetarSenha({ token, senha, confirmarSenha }) {
+
+  return function(dispatch) {
+
+    axios.post(`${API_URL}/usuario/resetarSenha`, { token, senha, confirmarSenha })
+      .then(response => {
+        dispatch({
+          type: RESETAR_SENHA
+        });
+      })
+      .catch(response => {
+        dispatch({
+          type: ERRO_NO_RESET_DE_SENHA,
+          payload: response.response.data.erro
+        });
+      });
+  }
+}
+
+export function resetarEsqueciSenha() {
+  return function(dispatch) {
+    dispatch({
+      type: RESETAR_RECUPERACAO_DE_SENHA
+    });
+  }
+}
+
+export function resetarResetSenha() {
+  return function(dispatch) {
+    dispatch({
+      type: RESETAR_RESET_DE_SENHA
+    });
+  }
 }

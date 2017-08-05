@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 
+import * as actions from '../../actions/autenticacao';
+
 const logoImgSrc = '../../../images/logo-projeto-incluir.png';
 
 class Cabecalho extends Component {
 
   static propTypes = {
 		autenticado: PropTypes.bool,
+    logoutUsuario: PropTypes.func,
 
 		match: PropTypes.object.isRequired,
 		location: PropTypes.object.isRequired,
@@ -40,7 +43,7 @@ class Cabecalho extends Component {
     if (this.props.autenticado) {
       return (
         <li className="nav-item" key={1}>
-          <Link className="nav-link" to="/logout">Sair</Link>
+          <a className="nav-link" style={{cursor: 'pointer'}} onClick={this.props.logoutUsuario}>Sair</a>
         </li>);
     } else {
       return [
@@ -92,4 +95,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Cabecalho);
+export default connect(mapStateToProps, actions)(Cabecalho);

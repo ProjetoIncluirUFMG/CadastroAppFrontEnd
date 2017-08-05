@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-const  { DOM: { input, select, textarea } } = React
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import { formValueSelector } from 'redux-form';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import Loading from 'react-loading-animation';
+import Modal from 'react-modal';
+import _ from 'underscore';
 
 import * as acoesAutenticacao from '../../../actions/autenticacao';
 import * as acoesUsuario from '../../../actions/usuario';
@@ -39,6 +40,18 @@ const Escolaridades = [
 	"Superior Incompleto"
 ];
 
+const estiloDoModal = {
+  content : {
+    top         : '50%',
+    left        : '50%',
+    right       : 'auto',
+    bottom      : 'auto',
+    marginRight : '-50%',
+    transform   : 'translate(-50%, -50%)',
+    width       : '50%',
+  }
+};
+
 class Cadastro extends Component {
 
 	static propTypes = {
@@ -47,6 +60,7 @@ class Cadastro extends Component {
 
 		is_cpf_responsavel: PropTypes.bool,
 		email: PropTypes.string,
+    usuarioAutenticado: PropTypes.bool,
 
 		cadastrarUsuario: PropTypes.func.isRequired,
 		buscarUsuario: PropTypes.func.isRequired,
@@ -65,14 +79,29 @@ class Cadastro extends Component {
 	constructor() {
 		super();
 		this.state = {
-			mensagemDeErro: null
+			mensagemDeErro: null,
+      preCarregandoUsuario: false,
+      modalEstaAberto: false,
+      cadastrandoUsuario: false
 		};
+
+    this.abrirModal = this.abrirModal.bind(this);
+    this.fecharModal = this.fecharModal.bind(this);
 	}
 
-	prePreencherFormulario(usuario) {
-    console.log("usuario: ", usuario);
+  abrirModal() {
+    this.setState({
+      modalEstaAberto: true,
+      cadastrandoUsuario: false
+    });
+  }
 
-		if (usuario.email !== null) this.props.change('email', usuario.email);
+  fecharModal() {
+    this.setState({modalEstaAberto: false});
+    this.props.history.push('/');
+  }
+
+	prePreencherFormulario(usuario) {
 		if (usuario.nome_aluno !== null) this.props.change('nome_aluno', usuario.nome_aluno);
 		// Remover caracteres do RG
 		if (usuario.rg !== null) this.props.change('numero_rg', usuario.rg.replace(/\D/g,''));
@@ -93,6 +122,15 @@ class Cadastro extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
+    this.setState({
+      preCarregandoUsuario: false
+    });
+
+    // Redirecionar usuario para pagina principal depois do cadastro
+    if (nextProps.usuarioAutenticado) {
+      this.abrirModal();
+    }
+
 		if (this.props.mensagemDeErro !== nextProps.mensagemDeErro) {
 			this.setState({
 				mensagemDeErro: nextProps.mensagemDeErro
@@ -106,12 +144,17 @@ class Cadastro extends Component {
 
 		if (this.props.email !== nextProps.email &&
 			  validacoes.email(nextProps.email) === undefined) {
-			this.props.buscarUsuario(nextProps.email);
+      this.setState({
+        preCarregandoUsuario: true
+      });
+			this.buscarUsuario(nextProps.email);
 		}
 	}
 
   submeterFormulario(formProps) {
-		console.log("formProps: ", formProps);
+    this.setState({
+      cadastrandoUsuario: true
+    });
 
 		let googleLocation = null;
 
@@ -139,12 +182,20 @@ class Cadastro extends Component {
 			});
   }
 
-	buscarUsuario(email) {
-		this.props.buscarUsuario(email);
-	}
+	buscarUsuario =  _.debounce((email) => {
+    this.setState({
+      preCarregandoUsuario: false
+    });
+    this.props.buscarUsuario(email);
+	}, 300);
 
   mostrarAlertas() {
     if (this.state.mensagemDeErro) {
+      if (this.state.cadastrandoUsuario) {
+        this.setState({
+          cadastrandoUsuario: false
+        });
+      }
       return (
 				<div>
 					<br />
@@ -176,6 +227,12 @@ class Cadastro extends Component {
             ]}
             style={{width: "100%"}}
 					/>
+
+          {this.state.preCarregandoUsuario || this.state.cadastrandoUsuario ?
+          <div className="carregando">
+            <Loading />
+            <b>Carregando...</b>
+          </div> : <span></span>}
 
           <Field
 						label="Senha"
@@ -358,6 +415,21 @@ class Cadastro extends Component {
             <button type="submit" className={'btn btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Cadastrar</button>
           </div>
         </form>
+
+        <Modal
+          isOpen={this.state.modalEstaAberto}
+          onRequestClose={this.fecharModal}
+          style={estiloDoModal}
+          contentLabel='Cadastro concluído'
+        >
+          <div className='cadastro'>
+            <h2>Cadastro realizado com sucesso!</h2>
+            <br/>
+            <div>
+              <button className='btn btn-primary btn-lg botao' onClick={this.fecharModal}>Buscar cursos</button>
+            </div>
+          </div>
+        </Modal>
       </div>
     );
   }
@@ -371,8 +443,9 @@ function mapStateToProps(state) {
   return {
     is_cpf_responsavel: selector(state, 'is_cpf_responsavel'),
 		email: selector(state, 'email'),
-    mensagemDeErro: state.autenticacao.erro,
-		usuario: state.usuario.encontrado
+    mensagemDeErro: state.usuario.erro,
+		usuario: state.usuario.encontrado,
+    usuarioAutenticado: state.autenticacao.autenticado,
   };
 }
 

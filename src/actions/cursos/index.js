@@ -22,14 +22,10 @@ export function buscarCursos() {
 
       })
       .catch((err) => {
-        dispatch(erro('Erro ao buscar lista de cursos'));
+        dispatch({
+          type: ERRO_NOS_CURSOS,
+          payload: 'Erro ao buscar lista de cursos'
+        });
       });
   }
-}
-
-export function erro(error) {
-  return {
-    type: ERRO_NOS_CURSOS,
-    payload: error
-  };
 }

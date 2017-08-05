@@ -38,6 +38,7 @@ export default class PlaceField extends Component {
 						classNames={cssClasses}
 						autocompleteItem={AutocompleteItem}
 						inputProps={input}
+            autocomplete={"off"}
 					/>
 					{touched && (error && <div className="alert alert-warning alerta">{error}</div>)}
 				</fieldset>
