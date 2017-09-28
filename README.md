@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ProjetoIncluirUFMG/CadastroFrontEnd.svg?branch=travis)](https://travis-ci.org/ProjetoIncluirUFMG/CadastroFrontEnd)
+
 Projeto Incluir - Front-end Sistema de Cadastro
 ==================================
 
