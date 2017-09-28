@@ -1,20 +1,42 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm , formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
+import Loading from 'react-loading-animation';
 import PropTypes from 'prop-types'
+import Modal from 'react-modal';
 
 import * as actions from '../../../actions/autenticacao';
 
 import * as validacoes from '../../genericos/formulario/utils/validacoesDeFormulario';
+import * as normalizacoes from '../../genericos/formulario/utils/normalizacaoDeFormulario';
+
 import Input from '../../genericos/formulario/Input';
 import DropDown from '../../genericos/formulario/DropDown';
+
+const estiloDoModal = {
+  content : {
+    top         : '50%',
+    left        : '50%',
+    right       : 'auto',
+    bottom      : 'auto',
+    marginRight : '-50%',
+    transform   : 'translate(-50%, -50%)',
+    width       : '50%',
+  }
+};
+
+const selector = formValueSelector('login');
 
 class Login extends Component {
 
 	static propTypes = {
 		mensagemDeErro: PropTypes.string,
 		loginUsuario: PropTypes.func.isRequired,
-    	usuarioAutenticado: PropTypes.bool,
+    usuarioAutenticado: PropTypes.bool,
+    temDependente: PropTypes.bool,
+    listaDependentes: PropTypes.array,
+
+    buscarDependentesUsuario: PropTypes.func.isRequired,
 
 		valid: PropTypes.bool.isRequired,
 		handleSubmit: PropTypes.func.isRequired,
@@ -26,11 +48,60 @@ class Login extends Component {
 		history: PropTypes.object.isRequired
 	}
 
+  constructor() {
+		super();
+		this.state = {
+      temDependente: null,
+      usuarioDependente: null,
+      listaDependentes: [],
+      modalEstaAberto: false,
+      preCarregandoDependentes: false
+		};
+
+    this.abrirModal = this.abrirModal.bind(this);
+    this.fecharModal = this.fecharModal.bind(this);
+	}
+
+  abrirModal() {
+    this.setState({ modalEstaAberto: true });
+  }
+
+  fecharModal() {
+    this.setState({ modalEstaAberto: false });
+  }
+
 	submeterFormulario(formProps) {
+    formProps.usuarioDependente = this.state.usuarioDependente;
     this.props.loginUsuario(formProps);
   }
 
   componentWillReceiveProps(nextProps) {
+    if (this.props.temDependente !== nextProps.temDependente) {
+
+      this.setState({ preCarregandoDependentes: false });
+
+      if (nextProps.temDependente === true) {
+        this.setState({
+          temDependente: true,
+          modalEstaAberto: true,
+          listaDependentes: nextProps.listaDependentes,
+         });
+      } else if (nextProps.temDependente === false){
+        this.setState({
+          temDependente: false,
+          modalEstaAberto: false,
+          listaDependentes: nextProps.listaDependentes,
+         });
+      }
+    }
+
+    // Validar se usuário tem dependentes
+    if (this.props.cpf && this.props.cpf !== nextProps.cpf &&
+			  validacoes.cpf(nextProps.cpf) === undefined) {
+      this.setState({ preCarregandoDependentes: true });
+			this.props.buscarDependentesUsuario(nextProps.cpf);
+		}
+
     // Redirecionar usuario para pagina principal depois do login
     if (nextProps.usuarioAutenticado) this.props.history.push('/');
   }
@@ -56,18 +127,27 @@ class Login extends Component {
     return (
 			<div className="login">
         <form onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
-					<Field
-						label="Email"
-						name="email"
-						type="text"
-						component={Input}
-						validate={[
-							validacoes.obrigatorio,
-							validacoes.email
-						]}
-						style={{width: "100%"}}
-					/>
 
+          {this.state.preCarregandoDependentes ?
+          <div className="carregando">
+            <Loading />
+            <b>Carregando...</b>
+          </div> : <span></span>}
+
+          <Field
+            label="CPF"
+            name="cpf"
+            type="text"
+            component={Input}
+            validate={[
+              validacoes.obrigatorio,
+              validacoes.cpf
+            ]}
+            style={{width: "100%"}}
+            normalize={normalizacoes.cpf}
+          />
+
+          { this.state.temDependente === false ?
 					<Field
 						label="Senha"
 						name="senha"
@@ -79,14 +159,51 @@ class Login extends Component {
 							validacoes.valorMaximoDeCaracteres(12)
 						]}
 						style={{width: "100%"}}
-					/>
+					/> : <div className="clearfix breakline"/>}
 
 	        {this.mostrarAlertas()}
 
 					<div className="clearfix top_space">
-            <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Login</button>
+            <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso || this.state.temDependente}>Login</button>
 						<button className="btn btn-default" onClick={() => this.props.history.push('/esqueciSenha')}>Esqueci minha senha</button>
           </div>
+
+          <Modal
+            isOpen={this.state.modalEstaAberto}
+            onRequestClose={this.fecharModal}
+            style={estiloDoModal}
+            contentLabel='Apresentar alunos dependentes'
+          >
+            <div className='login'>
+              <h2>Selecione o dependente desejado:</h2>
+              <br/>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>RG</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.listaDependentes.map((dependente) => {
+                    return (<tr>
+                      <td>{dependente.nome_aluno}</td>
+                      <td>{dependente.email}</td>
+                      <td>{dependente.rg}</td>
+                      <th><button className="btn btn-default" onClick={() => this.setState({
+                        temDependente: false,
+                        listaDependentes: null,
+                        modalEstaAberto: false,
+                        usuarioDependente: dependente
+                  		})}>Selecionar</button></th>
+                    </tr>);
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </Modal>
 	      </form>
 			</div>
     )
@@ -99,8 +216,11 @@ const LoginForm = reduxForm({
 
 function mapStateToProps(state) {
   return {
+    cpf: selector(state, 'cpf'),
     mensagemDeErro: state.autenticacao.erro,
     usuarioAutenticado: state.autenticacao.autenticado,
+    temDependente: state.autenticacao.temDependente,
+    listaDependentes: state.autenticacao.listaDependentes,
   };
 }
 

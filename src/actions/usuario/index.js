@@ -10,9 +10,9 @@ import {
   API_URL
 } from '../api';
 
-export function buscarUsuario(email) {
+export function buscarUsuario(cpf) {
 	return function(dispatch) {
-		axios.get(`${API_URL}/usuario`, { params: { email } })
+		axios.get(`${API_URL}/usuario`, { params: { cpf } })
       .then(response => {
 
         if (response.data === '') {

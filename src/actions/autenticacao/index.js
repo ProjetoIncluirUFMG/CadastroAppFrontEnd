@@ -5,6 +5,9 @@ import {
   DESAUTENTICAR_USUARIO,
   ERRO_NA_AUTENTICACAO,
 
+  VALIDAR_USUARIO_DEPENDENTE,
+  ERRO_NA_VALIDACAO_DE_DEPENDENCIA,
+
   RECUPERAR_SENHA,
   ERRO_NA_RECUPERACAO_DE_SENHA,
   RESETAR_RECUPERACAO_DE_SENHA,
@@ -26,11 +29,11 @@ export function logoutUsuario() {
   };
 };
 
-export function loginUsuario({email, senha}) {
+export function loginUsuario({email, senha, usuarioDependente}) {
 
   return function(dispatch) {
 
-    axios.post(`${API_URL}/usuario/login`, { email, senha })
+    axios.post(`${API_URL}/usuario/login`, { email, senha, usuarioDependente })
       .then(response => {
 
         dispatch({
@@ -43,6 +46,27 @@ export function loginUsuario({email, senha}) {
         dispatch({
           type: ERRO_NA_AUTENTICACAO,
           payload: "Email ou senha inválido, tente novamente!"
+        });
+      });
+  }
+}
+
+export function buscarDependentesUsuario(cpf) {
+
+  return function(dispatch) {
+
+    axios.get(`${API_URL}/usuario/temDependente`, { params: { cpf } })
+      .then(response => {
+
+        dispatch({
+          type: VALIDAR_USUARIO_DEPENDENTE,
+          payload: response.data
+        });
+      })
+      .catch(response => {
+        dispatch({
+          type: ERRO_NA_VALIDACAO_DE_DEPENDENCIA,
+          payload: "Erro ao validar se usúario é dependente!"
         });
       });
   }

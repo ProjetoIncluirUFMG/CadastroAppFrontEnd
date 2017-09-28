@@ -13,11 +13,11 @@ export function buscarCursos() {
 
   return function(dispatch) {
     axios.get(`${API_URL}/cursos`)
-      .then(resposta => {
+      .then(response => {
 
         dispatch({
           type: BUSCAR_LISTA_DE_CURSOS,
-          payload: resposta.data
+          payload: response.data
         });
 
       })

@@ -97,19 +97,22 @@ class Cadastro extends Component {
   }
 
   fecharModal() {
-    this.setState({modalEstaAberto: false});
+    this.setState({ modalEstaAberto: false });
     this.props.history.push('/');
   }
 
 	prePreencherFormulario(usuario) {
 		if (usuario.nome_aluno !== null) this.props.change('nome_aluno', usuario.nome_aluno);
+    if (usuario.email !== null) this.props.change('email', usuario.email);
+
+		if (usuario.is_cpf_responsavel !== null) this.props.change('is_cpf_responsavel', usuario.is_cpf_responsavel === 1 ? true : false);
+    if (usuario.is_cpf_responsavel === 1) this.props.change('nome_responsavel', usuario.nome_responsavel);
+
 		// Remover caracteres do RG
 		if (usuario.rg !== null) this.props.change('numero_rg', usuario.rg.replace(/\D/g,''));
     // Remover numeros do RG
     if (usuario.rg !== null) this.props.change('uf_rg', usuario.rg.replace(/[^a-zA-Z]+/,''));
-		if (usuario.cpf !== null) this.props.change('cpf', normalizacoes.cpf(usuario.cpf));
-		if (usuario.is_cpf_responsavel !== null) this.props.change('is_cpf_responsavel', usuario.is_cpf_responsavel === 1 ? true : false);
-		if (usuario.is_cpf_responsavel === 1) this.props.change('nome_responsavel', usuario.nome_responsavel);
+
 		if (usuario.telefone !== null) this.props.change('telefone', normalizacoes.telefoneFixo(usuario.telefone));
 		if (usuario.celular !== null) this.props.change('celular', normalizacoes.telefoneCelular(usuario.celular));
 		if (usuario.sexo !== null) this.props.change('sexo', String(usuario.sexo));
@@ -142,12 +145,12 @@ class Cadastro extends Component {
 			this.prePreencherFormulario(nextProps.usuario);
 		}
 
-		if (this.props.email !== nextProps.email &&
-			  validacoes.email(nextProps.email) === undefined) {
+		if (this.props.cpf !== nextProps.cpf &&
+			  validacoes.cpf(nextProps.cpf) === undefined) {
       this.setState({
         preCarregandoUsuario: true
       });
-			this.buscarUsuario(nextProps.email);
+			this.buscarUsuario(nextProps.cpf);
 		}
 	}
 
@@ -182,11 +185,11 @@ class Cadastro extends Component {
 			});
   }
 
-	buscarUsuario =  _.debounce((email) => {
+	buscarUsuario =  _.debounce((cpf) => {
     this.setState({
       preCarregandoUsuario: false
     });
-    this.props.buscarUsuario(email);
+    this.props.buscarUsuario(cpf);
 	}, 300);
 
   mostrarAlertas() {
@@ -216,17 +219,40 @@ class Cadastro extends Component {
     return (
       <div className="cadastro">
         <form onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
+
           <Field
-						label="Email"
-						name="email"
-						type="text"
-						component={Input}
+            label="CPF"
+            name="cpf"
+            type="text"
+            component={Input}
             validate={[
               validacoes.obrigatorio,
-              validacoes.email
+              validacoes.cpf
             ]}
             style={{width: "100%"}}
-					/>
+            normalize={normalizacoes.cpf}
+          />
+
+          <Field
+						label="CPF do Responsável"
+            name="is_cpf_responsavel"
+            component={Checkbox}
+            style={{width: "20%"}}
+          />
+
+          {this.props.is_cpf_responsavel ?
+          <Field
+						label="Nome do Responsável"
+            name="nome_responsavel"
+						type="text"
+            component={Input}
+            validate={[
+              validacoes.obrigatorio,
+              validacoes.valorMinimoDeCaracteres(4),
+              validacoes.valorMaximoDeCaracteres(100)
+              ]}
+            style={{width: "80%"}}
+          /> : <div className="clearfix breakline"/>}
 
           {this.state.preCarregandoUsuario || this.state.cadastrandoUsuario ?
           <div className="carregando">
@@ -275,11 +301,22 @@ class Cadastro extends Component {
           />
 
           <Field
+						label="Email"
+						name="email"
+						type="text"
+						component={Input}
+            validate={[
+              validacoes.obrigatorio,
+              validacoes.email
+            ]}
+            style={{width: "100%"}}
+					/>
+
+          <Field
 						label="UF"
 						name="uf_rg"
 						component={DropDown}
             opcoes={UFs}
-            validate={validacoes.obrigatorio}
             style={{width: "30%", marginRight: "2%"}}
 					/>
 
@@ -288,43 +325,8 @@ class Cadastro extends Component {
 						name="numero_rg"
 						type="text"
 						component={Input}
-            validate={validacoes.obrigatorio}
             style={{width: "68%"}}
           />
-
-          <Field
-						label="CPF"
-						name="cpf"
-						type="text"
-						component={Input}
-            validate={[
-              validacoes.obrigatorio,
-              validacoes.cpf
-            ]}
-            style={{width: "100%"}}
-            normalize={normalizacoes.cpf}
-					/>
-
-          <Field
-						label="CPF do Responsável"
-            name="is_cpf_responsavel"
-            component={Checkbox}
-            style={{width: "20%"}}
-          />
-
-          {this.props.is_cpf_responsavel ?
-          <Field
-						label="Nome do Responsável"
-            name="nome_responsavel"
-						type="text"
-            component={Input}
-            validate={[
-              validacoes.obrigatorio,
-              validacoes.valorMinimoDeCaracteres(4),
-              validacoes.valorMaximoDeCaracteres(100)
-              ]}
-            style={{width: "80%"}}
-          	/> : <div className="clearfix breakline"/>}
 
           <Field
 						label="Telefone Fixo"
@@ -442,7 +444,7 @@ const CadastroForm = reduxForm({
 function mapStateToProps(state) {
   return {
     is_cpf_responsavel: selector(state, 'is_cpf_responsavel'),
-		email: selector(state, 'email'),
+		cpf: selector(state, 'cpf'),
     mensagemDeErro: state.usuario.erro,
 		usuario: state.usuario.encontrado,
     usuarioAutenticado: state.autenticacao.autenticado,
