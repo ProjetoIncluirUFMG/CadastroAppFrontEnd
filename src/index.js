@@ -17,6 +17,8 @@ import ResetarSenha from './components/views/autenticacao/resetar_senha';
 
 import reducers from './reducers';
 import { AUTENTICAR_USUARIO } from './actions/autenticacao/tipos';
+import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.min.css';
+import '!style-loader!css-loader!react-datepicker/dist/react-datepicker.css';
 
 const customHistory = createBrowserHistory();
 
