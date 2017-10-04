@@ -17,7 +17,7 @@ import * as normalizacoes from '../../genericos/formulario/utils/normalizacaoDeF
 import Input from '../../genericos/formulario/Input';
 import DropDown from '../../genericos/formulario/DropDown';
 import RadioGroup from '../../genericos/formulario/RadioGroup';
-import Checkbox from '../../genericos/formulario/Checkbox';
+import CheckBox from '../../genericos/formulario/CheckBox';
 import { default as DatePicker } from '../../genericos/formulario/DatePicker';
 import PlaceField from '../../genericos/formulario/PlaceField';
 import Captcha from '../../genericos/formulario/Captcha/index';
@@ -236,7 +236,7 @@ class Cadastro extends Component {
           <Field
 						label="CPF do Responsável"
             name="is_cpf_responsavel"
-            component={Checkbox}
+            component={CheckBox}
             style={{width: "20%"}}
           />
 
