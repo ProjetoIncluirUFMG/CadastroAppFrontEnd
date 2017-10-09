@@ -2,10 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom';
+import { Router, Route, withRouter } from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 import createBrowserHistory from 'history/createBrowserHistory'
 import jwt_decode from 'jwt-decode';
+
+import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.min.css';
+import '!style-loader!css-loader!react-datepicker/dist/react-datepicker.css';
 
 import App from './components/app';
 import AutenticacaoRequerida from './components/genericos/autenticacao_requerida';
@@ -17,11 +20,8 @@ import ResetarSenha from './components/views/autenticacao/resetar_senha';
 
 import reducers from './reducers';
 import { AUTENTICAR_USUARIO } from './actions/autenticacao/tipos';
-import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.min.css';
-import '!style-loader!css-loader!react-datepicker/dist/react-datepicker.css';
 
 const customHistory = createBrowserHistory();
-
 
 const jwtValidation = store => next => action => {
   let token = localStorage.getItem('piToken');

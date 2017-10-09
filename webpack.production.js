@@ -3,6 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const Dotenv = require('dotenv-webpack');
+const ReplacePlugin = require('replace-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
@@ -44,6 +45,16 @@ module.exports = {
     ]),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new ReplacePlugin({
+      entry: '/src/index.html',
+      output: '/dist/index.html',
+      data: {
+        js: '	<script src="https://maps.googleapis.com/maps/api/js?key=' + process.env.GOOGLE_PLACES_API_KEY + '&libraries=places&language=pt-br"></script>'
+      }
+    }),
+    new Dotenv({
+      path: './.env.prod', // Path to .env file (this is the default)
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

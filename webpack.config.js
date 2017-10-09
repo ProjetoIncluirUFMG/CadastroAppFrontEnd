@@ -14,7 +14,7 @@ module.exports = {
   output: {
     path: buildPath,
     publicPath: '/dist',
-    filename: '[name].js'
+    filename: 'bundle.js'
   },
   module: {
     rules: [
@@ -41,7 +41,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(eot?.+|svg?.+|ttf?.+|otf?.+|woff?.+|woff2?.+)$/,
+        test: /\.(jpeg?.+|jpg?.+|png?.+|eot?.+|svg?.+|ttf?.+|otf?.+|woff?.+|woff2?.+)$/,
         use: 'file-loader?name=assets/[name]-[hash].[ext]'
       }]
   },
@@ -53,7 +53,7 @@ module.exports = {
       filename: 'index.html',
     }),
     new ReplacePlugin({
-      entry: '/dist/index.html',
+      entry: '/src/index.html',
       output: '/dist/index.html',
       data: {
         js: '	<script src="https://maps.googleapis.com/maps/api/js?key=' + process.env.GOOGLE_PLACES_API_KEY + '&libraries=places&language=pt-br"></script>'
