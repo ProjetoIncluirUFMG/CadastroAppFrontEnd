@@ -48,7 +48,7 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new Dotenv({
-      path: './.env.prod', // Path to .env file (this is the default)
+      path: './.env', // Path to .env file (this is the default)
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
