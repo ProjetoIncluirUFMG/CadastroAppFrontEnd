@@ -4,7 +4,7 @@
   "description": "Front-end do Cadastro App",
   "main": "index.js",
   "scripts": {
-    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --content-base dist",
+    "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --content-base --config webpack.production.js dist",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch",
     "build": "webpack --config webpack.production.js"
@@ -63,6 +63,7 @@
     "redux": "^3.6.0",
     "redux-form": "^6.6.3",
     "redux-thunk": "^2.2.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "webpack-clear-require": "^1.0.1"
   }
 }

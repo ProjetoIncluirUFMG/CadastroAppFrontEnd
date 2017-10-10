@@ -22,7 +22,7 @@ import reducers from './reducers';
 import { AUTENTICAR_USUARIO } from './actions/autenticacao/tipos';
 
 const customHistory = createBrowserHistory();
-
+ 
 const jwtValidation = store => next => action => {
   let token = localStorage.getItem('piToken');
   // TODO
