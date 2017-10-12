@@ -56,14 +56,14 @@ class Cadastro extends Component {
 
 	static propTypes = {
 		mensagemDeErro: PropTypes.string,
-		usuario: PropTypes.object,
+		usuarios: PropTypes.object,
 
 		is_cpf_responsavel: PropTypes.bool,
 		email: PropTypes.string,
     usuarioAutenticado: PropTypes.bool,
 
 		cadastrarUsuario: PropTypes.func.isRequired,
-		buscarUsuario: PropTypes.func.isRequired,
+		buscarUsuarios: PropTypes.func.isRequired,
 
 		valid: PropTypes.bool.isRequired,
 		handleSubmit: PropTypes.func.isRequired,
@@ -81,37 +81,60 @@ class Cadastro extends Component {
 		this.state = {
 			mensagemDeErro: null,
       preCarregandoUsuario: false,
-      modalEstaAberto: false,
+      modalCadastroConcluidoEstaAberto: false,
+      modalPreCargaDeAlunosEstaAberto: false,
       cadastrandoUsuario: false
 		};
 
-    this.abrirModal = this.abrirModal.bind(this);
-    this.fecharModal = this.fecharModal.bind(this);
+    this.abrirModalCadastroConcluido = this.abrirModalCadastroConcluido.bind(this);
+    this.fecharModalCadastroConcluido = this.fecharModalCadastroConcluido.bind(this);
+
+    this.abrirModalPreCargaDeAlunos = this.abrirModalPreCargaDeAlunos.bind(this);
+    this.fecharModalPreCargaDeAlunos = this.fecharModalPreCargaDeAlunos.bind(this);
 	}
 
-  abrirModal() {
+  abrirModalPreCargaDeAlunos() {
+    this.setState({ 
+      modalPreCargaDeAlunosEstaAberto: true,
+      preCarregandoUsuario: false
+    });
+  }
+
+  fecharModalPreCargaDeAlunos() {
+    this.setState({ modalPreCargaDeAlunosEstaAberto: false });
+  }
+
+  abrirModalCadastroConcluido() {
     this.setState({
-      modalEstaAberto: true,
+      modalCadastroConcluidoEstaAberto: true,
       cadastrandoUsuario: false
     });
   }
 
-  fecharModal() {
-    this.setState({ modalEstaAberto: false });
+  fecharModalCadastroConcluido() {
+    this.setState({ modalCadastroConcluidoEstaAberto: false });
     this.props.history.push('/');
   }
 
 	prePreencherFormulario(usuario) {
+    this.fecharModalPreCargaDeAlunos();
+
+    if (usuario.id_aluno !== null) this.props.change('id_aluno', usuario.id_aluno);
+
 		if (usuario.nome_aluno !== null) this.props.change('nome_aluno', usuario.nome_aluno);
     if (usuario.email !== null) this.props.change('email', usuario.email);
 
-		if (usuario.is_cpf_responsavel !== null) this.props.change('is_cpf_responsavel', usuario.is_cpf_responsavel === 1 ? true : false);
-    if (usuario.is_cpf_responsavel === 1) this.props.change('nome_responsavel', usuario.nome_responsavel);
+		if (usuario.is_cpf_responsavel) {
+      this.props.change('is_cpf_responsavel', usuario.is_cpf_responsavel);
+      this.props.change('nome_responsavel', usuario.nome_responsavel);
+    }
 
-		// Remover caracteres do RG
-		if (usuario.rg !== null) this.props.change('numero_rg', usuario.rg.replace(/\D/g,''));
-    // Remover numeros do RG
-    if (usuario.rg !== null) this.props.change('uf_rg', usuario.rg.replace(/[^a-zA-Z]+/,''));
+		if (usuario.rg !== null) {
+      // Remover caracteres do RG
+      this.props.change('numero_rg', usuario.rg.replace(/\D/g,''));
+      // Remover numeros do RG
+      this.props.change('uf_rg', usuario.rg.replace(/[^a-zA-Z]+/,''));
+    }
 
 		if (usuario.telefone !== null) this.props.change('telefone', normalizacoes.telefoneFixo(usuario.telefone));
 		if (usuario.celular !== null) this.props.change('celular', normalizacoes.telefoneCelular(usuario.celular));
@@ -131,7 +154,7 @@ class Cadastro extends Component {
 
     // Redirecionar usuario para pagina principal depois do cadastro
     if (nextProps.usuarioAutenticado) {
-      this.abrirModal();
+      this.abrirModalCadastroConcluido();
     }
 
 		if (this.props.mensagemDeErro !== nextProps.mensagemDeErro) {
@@ -140,18 +163,19 @@ class Cadastro extends Component {
 			});
 		}
 
-		if (this.props.usuario !== nextProps.usuario &&
-			  nextProps.usuario !== null) {
-			this.prePreencherFormulario(nextProps.usuario);
-		}
-
+    // Carregar usuarios com determinado CPF
 		if (this.props.cpf !== nextProps.cpf &&
 			  validacoes.cpf(nextProps.cpf) === undefined) {
-      this.setState({
-        preCarregandoUsuario: true
-      });
-			this.buscarUsuario(nextProps.cpf);
+			this.buscarUsuarios(nextProps.cpf);
 		}
+
+    // Apresentar usuarios com determinado CPF
+    if (nextProps.usuarios !== undefined && 
+        nextProps.usuarios !== null && 
+        nextProps.usuarios.length > 0 &&
+        this.props.usuarios !== nextProps.usuarios) {
+      this.abrirModalPreCargaDeAlunos();
+    }
 	}
 
   submeterFormulario(formProps) {
@@ -185,11 +209,12 @@ class Cadastro extends Component {
 			});
   }
 
-	buscarUsuario =  _.debounce((cpf) => {
+	buscarUsuarios =  _.debounce((cpf) => {
     this.setState({
-      preCarregandoUsuario: false
+      preCarregandoUsuario: true
     });
-    this.props.buscarUsuario(cpf);
+    this.props.limparListaUsuariosPreCarregados();
+    this.props.buscarUsuarios(cpf);
 	}, 300);
 
   mostrarAlertas() {
@@ -418,9 +443,10 @@ class Cadastro extends Component {
           </div>
         </form>
 
+        { this.state.modalCadastroConcluidoEstaAberto ?
         <Modal
-          isOpen={this.state.modalEstaAberto}
-          onRequestClose={this.fecharModal}
+          isOpen={this.state.modalCadastroConcluidoEstaAberto}
+          onRequestClose={this.fecharModalCadastroConcluido}
           style={estiloDoModal}
           contentLabel='Cadastro concluído'
         >
@@ -428,10 +454,50 @@ class Cadastro extends Component {
             <h2>Cadastro realizado com sucesso!</h2>
             <br/>
             <div>
-              <button className='btn btn-primary btn-lg botao' onClick={this.fecharModal}>Buscar cursos</button>
+              <button className='btn btn-primary btn-lg botao' onClick={this.fecharModalCadastroConcluido}>Buscar cursos</button>
             </div>
           </div>
         </Modal>
+        : <span></span> }
+
+        { this.state.modalPreCargaDeAlunosEstaAberto ?
+        <Modal
+          isOpen={this.state.modalPreCargaDeAlunosEstaAberto}
+          onRequestClose={this.fecharModalPreCargaDeAlunos}
+          style={estiloDoModal}
+          contentLabel='Pre carga de alunos'
+        >
+          <div className='cadastro'>
+            <h3>Selecione o aluno que gostaria de atualizar o cadastro</h3>
+            <br />
+            <div>
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Dependente</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.props.usuarios.map((usuario) => {
+                    return (<tr>
+                              <td>{usuario.nome_aluno}</td>
+                              <td>{usuario.cpf}</td>
+                              <td>{usuario.is_cpf_responsavel ? "Sim" : "Não"}</td>
+                              <td><button type="button" className="btn btn-primary"
+                                    onClick={() => { this.prePreencherFormulario(usuario) }}>Selecionar</button></td>
+                            </tr>);
+                  })}
+                </tbody>
+              </table>
+              <button type="button" className="btn btn-primary"
+                                    onClick={() => { this.fecharModalPreCargaDeAlunos() }}>Novo Aluno</button>
+            </div>
+          </div>
+        </Modal>
+        : <span></span> }
       </div>
     );
   }
@@ -446,7 +512,7 @@ function mapStateToProps(state) {
     is_cpf_responsavel: selector(state, 'is_cpf_responsavel'),
 		cpf: selector(state, 'cpf'),
     mensagemDeErro: state.usuario.erro,
-		usuario: state.usuario.encontrado,
+		usuarios: state.usuario.encontrados,
     usuarioAutenticado: state.autenticacao.autenticado,
   };
 }

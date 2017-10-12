@@ -2,7 +2,8 @@ import axios from 'axios';
 
 import {
   CADASTRAR_USUARIO,
-  BUSCAR_USUARIO,
+  BUSCAR_USUARIOS,
+  LIMPAR_LISTA_USUARIOS,
 	ERRO_NA_BUSCA
 } from './tipos';
 
@@ -10,7 +11,7 @@ import {
   API_URL
 } from '../api';
 
-export function buscarUsuario(cpf) {
+export function buscarUsuarios(cpf) {
 	return function(dispatch) {
 		axios.get(`${API_URL}/usuario`, { params: { cpf } })
       .then(response => {
@@ -20,7 +21,7 @@ export function buscarUsuario(cpf) {
         }
 
         dispatch({
-          type: BUSCAR_USUARIO,
+          type: BUSCAR_USUARIOS,
 					payload: response.data
         });
 
@@ -32,6 +33,12 @@ export function buscarUsuario(cpf) {
         });
       });
 	};
+};
+
+export function limparListaUsuariosPreCarregados() {
+  return function(dispatch) {
+    dispatch({ type: LIMPAR_LISTA_USUARIOS });
+  };
 };
 
 export function cadastrarUsuario(usuario) {

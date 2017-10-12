@@ -9,15 +9,14 @@ export const valorMinimoDeCaracteres = min => valorDoCampo => {
 export const numero = valorDoCampo => valorDoCampo && isNaN(Number(valorDoCampo)) ? 'Este campo deve ser um número' : undefined;
 
 export const telefoneFixo = valorDoCampo => {
-    return valorDoCampo && valorDoCampo.length < 14 ? `Telefone fixo incompleto` : undefined;
+    return valorDoCampo && valorDoCampo.length < 15 ? `Telefone fixo incompleto` : undefined;
 };
 
 export const telefoneCelular = valorDoCampo => {
-    return valorDoCampo && valorDoCampo.length < 15 ? `Telefone celular incompleto` : undefined;
+    return valorDoCampo && valorDoCampo.length < 16 ? `Telefone celular incompleto` : undefined;
 };
 
 export const sexo = (sexo, componente) => {
-    console.log("componente: ", componente);
     return true ? `Telefone celular incompleto` : undefined;
 };
 

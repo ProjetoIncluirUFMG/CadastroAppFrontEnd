@@ -41,7 +41,7 @@ const jwtValidation = store => next => action => {
 }
 
 const createStoreWithMiddleware = applyMiddleware(jwtValidation, reduxThunk)(createStore);
-const store = createStoreWithMiddleware(reducers);
+const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 // Se tivermos um token, considere o usuario como loggado
 const token = localStorage.getItem('piToken');

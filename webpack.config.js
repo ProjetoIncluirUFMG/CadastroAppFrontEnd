@@ -57,7 +57,7 @@ module.exports = {
         return module.context && module.context.indexOf('node_modules') >= 0;
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
+    /*new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
         screw_ie8: true,
@@ -73,7 +73,7 @@ module.exports = {
       output: {
         comments: false
       }
-    }),
+    }),*/
     new webpack.LoaderOptionsPlugin({
       options: {
         postcss: [
@@ -87,7 +87,7 @@ module.exports = {
         context: staticSourcePath
       }
     }),
-    new webpack.HashedModuleIdsPlugin(),
+    //new webpack.HashedModuleIdsPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'index.html'),
       path: buildPath,
@@ -110,13 +110,13 @@ module.exports = {
     new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'defer'
     }),
-    new CompressionPlugin({
+    /*new CompressionPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',
       test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
       threshold: 10240,
       minRatio: 0.8
-    })
+    })*/
   ],
   module: {
     rules: [
