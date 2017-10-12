@@ -29,11 +29,11 @@ export function logoutUsuario() {
   };
 };
 
-export function loginUsuario({email, senha, usuarioDependente}) {
+export function loginUsuario({senha, id_aluno}) {
 
   return function(dispatch) {
 
-    axios.post(`${API_URL}/usuario/login`, { email, senha, usuarioDependente })
+    axios.post(`${API_URL}/usuario/login`, { senha, id_aluno })
       .then(response => {
 
         dispatch({

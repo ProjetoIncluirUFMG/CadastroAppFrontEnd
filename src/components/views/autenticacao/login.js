@@ -34,7 +34,7 @@ class Login extends Component {
 		loginUsuario: PropTypes.func.isRequired,
     usuarioAutenticado: PropTypes.bool,
     temDependente: PropTypes.bool,
-    listaDependentes: PropTypes.array,
+    listaDeAlunos: PropTypes.array,
 
     buscarDependentesUsuario: PropTypes.func.isRequired,
 
@@ -51,9 +51,9 @@ class Login extends Component {
   constructor() {
 		super();
 		this.state = {
-      temDependente: null,
-      usuarioDependente: null,
-      listaDependentes: [],
+      multiplosUsuarios: null,
+      usuario: null,
+      listaDeAlunos: [],
       modalEstaAberto: false,
       preCarregandoDependentes: false
 		};
@@ -71,39 +71,51 @@ class Login extends Component {
   }
 
 	submeterFormulario(formProps) {
-    formProps.usuarioDependente = this.state.usuarioDependente;
+    formProps.id_aluno = this.state.usuario.id_aluno;
     this.props.loginUsuario(formProps);
   }
 
+  selecionarAlunoDaLista(aluno) {
+    this.setState({
+      multiplosUsuarios: false,
+      listaDeAlunos: null,
+      modalEstaAberto: false,
+      usuario: aluno
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
+    // Validar se usuário tem dependentes
+    if (nextProps.cpf && 
+        this.props.cpf !== nextProps.cpf &&
+        validacoes.cpf(nextProps.cpf) === undefined) {
+      this.setState({ preCarregandoDependentes: true });
+      this.props.buscarDependentesUsuario(nextProps.cpf);
+    }
+
     if (this.props.temDependente !== nextProps.temDependente) {
 
       this.setState({ preCarregandoDependentes: false });
 
-      if (nextProps.temDependente === true) {
+      if (nextProps.temDependente) {
         this.setState({
-          temDependente: true,
+          multiplosUsuarios: true,
           modalEstaAberto: true,
-          listaDependentes: nextProps.listaDependentes,
-         });
-      } else if (nextProps.temDependente === false){
+          listaDeAlunos: nextProps.listaDeAlunos,
+        });
+      } else if (!nextProps.temDependente){
         this.setState({
-          temDependente: false,
+          multiplosUsuarios: false,
           modalEstaAberto: false,
-          listaDependentes: nextProps.listaDependentes,
-         });
+          listaDeAlunos: null,
+          aluno: nextProps.listaDeAlunos[0]
+        });
       }
     }
 
-    // Validar se usuário tem dependentes
-    if (this.props.cpf && this.props.cpf !== nextProps.cpf &&
-			  validacoes.cpf(nextProps.cpf) === undefined) {
-      this.setState({ preCarregandoDependentes: true });
-			this.props.buscarDependentesUsuario(nextProps.cpf);
-		}
-
     // Redirecionar usuario para pagina principal depois do login
     if (nextProps.usuarioAutenticado) this.props.history.push('/');
+
   }
 
 	mostrarAlertas() {
@@ -147,7 +159,7 @@ class Login extends Component {
             normalize={normalizacoes.cpf}
           />
 
-          { this.state.temDependente === false ?
+          { this.state.multiplosUsuarios === false ?
 					<Field
 						label="Senha"
 						name="senha"
@@ -164,46 +176,44 @@ class Login extends Component {
 	        {this.mostrarAlertas()}
 
 					<div className="clearfix top_space">
-            <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso || this.state.temDependente}>Login</button>
+            <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso || this.state.multiplosUsuarios}>Login</button>
 						<button className="btn btn-default" onClick={() => this.props.history.push('/esqueciSenha')}>Esqueci minha senha</button>
           </div>
 
+          {this.state.modalEstaAberto ?
           <Modal
             isOpen={this.state.modalEstaAberto}
-            onRequestClose={this.fecharModal}
             style={estiloDoModal}
             contentLabel='Apresentar alunos dependentes'
           >
             <div className='login'>
-              <h2>Selecione o dependente desejado:</h2>
+              <h2>Selecione um aluno</h2>
               <br/>
-              <table class="table table-bordered">
+              <table className="table table-bordered">
                 <thead>
                   <tr>
                     <th>Nome</th>
                     <th>Email</th>
                     <th>RG</th>
+                    <th>Dependente</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.listaDependentes.map((dependente) => {
+                  {this.state.listaDeAlunos.map((aluno) => {
                     return (<tr>
-                      <td>{dependente.nome_aluno}</td>
-                      <td>{dependente.email}</td>
-                      <td>{dependente.rg}</td>
-                      <th><button className="btn btn-default" onClick={() => this.setState({
-                        temDependente: false,
-                        listaDependentes: null,
-                        modalEstaAberto: false,
-                        usuarioDependente: dependente
-                  		})}>Selecionar</button></th>
+                      <td>{aluno.nome_aluno}</td>
+                      <td>{aluno.email}</td>
+                      <td>{aluno.rg}</td>
+                      <td>{aluno.is_cpf_responsavel ? "Sim" : "Não"}</td>
+                      <th><button className="btn btn-primary" onClick={() => this.selecionarAlunoDaLista(aluno)}>Selecionar</button></th>
                     </tr>);
                   })}
                 </tbody>
               </table>
             </div>
           </Modal>
+          : <span></span> }
 	      </form>
 			</div>
     )
@@ -220,7 +230,7 @@ function mapStateToProps(state) {
     mensagemDeErro: state.autenticacao.erro,
     usuarioAutenticado: state.autenticacao.autenticado,
     temDependente: state.autenticacao.temDependente,
-    listaDependentes: state.autenticacao.listaDependentes,
+    listaDeAlunos: state.autenticacao.listaDeAlunos,
   };
 }
 

@@ -16,13 +16,13 @@ export default function(state = {}, action) {
     case AUTENTICAR_USUARIO:
       return {...state, erro: '', autenticado: true };
     case DESAUTENTICAR_USUARIO:
-      return {...state, erro: '', autenticado: false };
+      return {...state, erro: '', temDependente: null, listaDeAlunos: null, autenticado: false };
     case ERRO_NA_AUTENTICACAO:
       return {...state, erro: action.payload, autenticado: false };
     case VALIDAR_USUARIO_DEPENDENTE:
-      return {...state, erro: '', temDependente: action.payload.temDependente, listaDependentes: action.payload.listaDependentes };
+      return {...state, erro: '', temDependente: action.payload.temDependente, listaDeAlunos: action.payload.listaDeAlunos };
     case ERRO_NA_VALIDACAO_DE_DEPENDENCIA:
-      return {...state, erro: action.payload, temDependente: null, listaDependentes: null };
+      return {...state, erro: action.payload, temDependente: null, listaDeAlunos: null };
   }
   return state;
 }

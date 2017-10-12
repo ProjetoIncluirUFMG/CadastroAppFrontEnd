@@ -56,7 +56,7 @@ class Cadastro extends Component {
 
 	static propTypes = {
 		mensagemDeErro: PropTypes.string,
-		usuarios: PropTypes.object,
+		usuarios: PropTypes.array,
 
 		is_cpf_responsavel: PropTypes.bool,
 		email: PropTypes.string,
