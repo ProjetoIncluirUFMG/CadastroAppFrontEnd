@@ -7,6 +7,7 @@ import {
 
   VALIDAR_USUARIO_DEPENDENTE,
   ERRO_NA_VALIDACAO_DE_DEPENDENCIA,
+  LIMPAR_USUARIO_DEPENDENTE,
 
   RECUPERAR_SENHA,
   ERRO_NA_RECUPERACAO_DE_SENHA,
@@ -72,11 +73,17 @@ export function buscarDependentesUsuario(cpf) {
   }
 }
 
-export function recuperarSenha({ email }) {
+export function limparDependentes() {
+  return function(dispatch) {
+    dispatch({ type: LIMPAR_USUARIO_DEPENDENTE });
+  }
+}
+
+export function recuperarSenha({ id_aluno }) {
 
   return function(dispatch) {
 
-    axios.post(`${API_URL}/usuario/recuperarSenha`, { email })
+    axios.post(`${API_URL}/usuario/recuperarSenha`, { id_aluno })
       .then(response => {
         dispatch({
           type: RECUPERAR_SENHA

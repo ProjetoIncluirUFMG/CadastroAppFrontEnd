@@ -144,7 +144,7 @@ module.exports = {
         include: staticSourcePath
       },
       {
-        test: /\.(eot?.+|svg?.+|ttf?.+|otf?.+|woff?.+|woff2?.+)$/,
+        test: /\.(png?.+|eot?.+|svg?.+|ttf?.+|otf?.+|woff?.+|woff2?.+)$/,
         use: 'file-loader?name=assets/[name]-[hash].[ext]'
       },
     ]

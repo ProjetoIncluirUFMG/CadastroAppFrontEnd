@@ -19,6 +19,21 @@ export const cpf = value => {
   }
 }
 
+export const cep = value => {
+  if (!value) {
+    return value
+  }
+
+  const somenteNumeros = value.replace(/[^\d]/g, '');
+
+  if (somenteNumeros.length <= 5) {
+    return somenteNumeros
+  }
+  if (somenteNumeros.length > 5 && somenteNumeros.length <= 8) {
+    return `${somenteNumeros.slice(0, 5)}-${somenteNumeros.slice(5, 8)}`
+  }
+}
+
 export const telefoneFixo = value => {
   if (!value) {
     return value
@@ -53,4 +68,12 @@ export const telefoneCelular = value => {
   if (somenteNumeros.length <= 12) {
     return `(${somenteNumeros.slice(0, 3)}) ${somenteNumeros.slice(3, 8)}-${somenteNumeros.slice(8, 12)}`
   }
+}
+
+export const numero = value => {
+  if (!value) {
+    return value
+  }
+
+  return value.replace(/\D/g,'');
 }

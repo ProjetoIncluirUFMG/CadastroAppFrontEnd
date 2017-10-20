@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const obrigatorio = valorDoCampo => valorDoCampo ? undefined : 'Este campo é obrigatório';
 export const valorMaximoDeCaracteres = max => valorDoCampo => {
 	return valorDoCampo && valorDoCampo.length > max ? `Este campo deve conter no máximo ${max} caracteres ou menos` : undefined;
@@ -29,9 +31,14 @@ export const confirmacaoDeSenha = (senha, componente) =>
 
 export const cpf = valorDoCampo => !CPFValido(valorDoCampo) ? 'CPF inválido' : undefined;
 
+export const cep = valorDoCampo => !CEPValido(valorDoCampo) ? 'CEP inválido' : undefined;
+
 // Verifica se CPF é válido
 // http://www.receita.fazenda.gov.br/aplicacoes/atcta/cpf/funcoes.js
 const CPFValido = (strCPF) => {
+
+    // Verifica se campo cep possui valor informado.
+    if (strCPF === "" || strCPF === null || strCPF === undefined) return false;
 
     strCPF = strCPF.replace(/\./g, '').replace(/-/g, '');
 
@@ -56,4 +63,23 @@ const CPFValido = (strCPF) => {
     if ((Resto == 10) || (Resto == 11))  Resto = 0;
     if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
     return true;
+}
+
+// Verifica se CEP é válido
+const CEPValido = (strCEP) => {
+
+    // Verifica se campo cep possui valor informado.
+    if (strCEP === "" || strCEP === null || strCEP === undefined) return false;
+    
+    // Nova variável "cep" somente com dígitos.
+    var cep = strCEP.replace(/\D/g, '');
+
+    // Verifica se campo cep possui valor informado.
+    if (cep === "" || cep === null || cep === undefined) return false;
+
+    // Expressão regular para validar o CEP.
+    var validacep = /^[0-9]{8}$/;
+
+    // Valida o formato do CEP.
+    return validacep.test(cep);
 }

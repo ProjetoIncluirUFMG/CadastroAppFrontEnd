@@ -37,6 +37,7 @@ class Login extends Component {
     listaDeAlunos: PropTypes.array,
 
     buscarDependentesUsuario: PropTypes.func.isRequired,
+    limparDependentes: PropTypes.func.isRequired,
 
 		valid: PropTypes.bool.isRequired,
 		handleSubmit: PropTypes.func.isRequired,
@@ -85,15 +86,12 @@ class Login extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // Validar se usuário tem dependentes
-    if (nextProps.cpf && 
-        this.props.cpf !== nextProps.cpf &&
-        validacoes.cpf(nextProps.cpf) === undefined) {
-      this.setState({ preCarregandoDependentes: true });
-      this.props.buscarDependentesUsuario(nextProps.cpf);
-    }
 
-    if (this.props.temDependente !== nextProps.temDependente) {
+    // Redirecionar usuario para pagina principal depois do login
+    if (nextProps.usuarioAutenticado) return this.props.history.push('/');
+
+    if (this.props.temDependente !== nextProps.temDependente && 
+        nextProps.temDependente !== null) {
 
       this.setState({ preCarregandoDependentes: false });
 
@@ -102,19 +100,27 @@ class Login extends Component {
           multiplosUsuarios: true,
           modalEstaAberto: true,
           listaDeAlunos: nextProps.listaDeAlunos,
+          usuario: null
         });
       } else if (!nextProps.temDependente){
         this.setState({
           multiplosUsuarios: false,
           modalEstaAberto: false,
           listaDeAlunos: null,
-          aluno: nextProps.listaDeAlunos[0]
+          usuario: nextProps.listaDeAlunos[0]
         });
       }
+
+      this.props.limparDependentes();
     }
 
-    // Redirecionar usuario para pagina principal depois do login
-    if (nextProps.usuarioAutenticado) this.props.history.push('/');
+    // Validar se usuário tem dependentes
+    if (nextProps.cpf && 
+        this.props.cpf !== nextProps.cpf &&
+        validacoes.cpf(nextProps.cpf) === undefined) {
+      this.setState({ preCarregandoDependentes: true });
+      this.props.buscarDependentesUsuario(nextProps.cpf);
+    }
 
   }
 
@@ -138,7 +144,7 @@ class Login extends Component {
 
     return (
 			<div className="login">
-        <form onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
+        <form autocomplete="off" onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
 
           {this.state.preCarregandoDependentes ?
           <div className="carregando">
@@ -151,6 +157,7 @@ class Login extends Component {
             name="cpf"
             type="text"
             component={Input}
+            autocomplete="off"
             validate={[
               validacoes.obrigatorio,
               validacoes.cpf
@@ -176,7 +183,7 @@ class Login extends Component {
 	        {this.mostrarAlertas()}
 
 					<div className="clearfix top_space">
-            <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso || this.state.multiplosUsuarios}>Login</button>
+            <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Login</button>
 						<button className="btn btn-default" onClick={() => this.props.history.push('/esqueciSenha')}>Esqueci minha senha</button>
           </div>
 

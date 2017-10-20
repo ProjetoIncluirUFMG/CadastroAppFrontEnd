@@ -133,7 +133,6 @@ class ResetarSenha extends Component {
 
         <Modal
           isOpen={this.state.modalEstaAberto}
-          onRequestClose={this.fecharModal}
           style={estiloDoModal}
           contentLabel='Senha resetada com sucesso!'
         >

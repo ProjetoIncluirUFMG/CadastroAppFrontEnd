@@ -94,14 +94,14 @@ module.exports = {
       excludeChunks: ['base'],
       filename: 'index.html',
       hash: true,
-      minify: {
+      /*minify: {
         collapseWhitespace: true,
         collapseInlineTagWhitespace: true,
         removeComments: false,
         removeRedundantAttributes: true
-      }
+      }*/
     }),
-    new PreloadWebpackPlugin({
+    /*new PreloadWebpackPlugin({
       rel: 'preload',
       as: 'script',
       include: 'all',
@@ -110,7 +110,7 @@ module.exports = {
     new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'defer'
     }),
-    /*new CompressionPlugin({
+    new CompressionPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',
       test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
@@ -144,7 +144,7 @@ module.exports = {
         include: staticSourcePath
       },
       {
-        test: /\.(eot?.+|svg?.+|ttf?.+|otf?.+|woff?.+|woff2?.+)$/,
+        test: /\.(png?.+|eot?.+|svg?.+|ttf?.+|otf?.+|woff?.+|woff2?.+)$/,
         use: 'file-loader?name=assets/[name]-[hash].[ext]'
       },
     ]

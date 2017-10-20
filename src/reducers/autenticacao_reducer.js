@@ -3,6 +3,7 @@ import {
   DESAUTENTICAR_USUARIO,
   ERRO_NA_AUTENTICACAO,
   VALIDAR_USUARIO_DEPENDENTE,
+  LIMPAR_USUARIO_DEPENDENTE,
   ERRO_NA_VALIDACAO_DE_DEPENDENCIA
 } from '../actions/autenticacao/tipos';
 
@@ -18,9 +19,11 @@ export default function(state = {}, action) {
     case DESAUTENTICAR_USUARIO:
       return {...state, erro: '', temDependente: null, listaDeAlunos: null, autenticado: false };
     case ERRO_NA_AUTENTICACAO:
-      return {...state, erro: action.payload, autenticado: false };
+      return {...state, erro: action.payload, temDependente: null, listaDeAlunos: null, autenticado: false };
     case VALIDAR_USUARIO_DEPENDENTE:
       return {...state, erro: '', temDependente: action.payload.temDependente, listaDeAlunos: action.payload.listaDeAlunos };
+    case LIMPAR_USUARIO_DEPENDENTE:
+      return {...state, erro: '', temDependente: null, listaDeAlunos: null };
     case ERRO_NA_VALIDACAO_DE_DEPENDENCIA:
       return {...state, erro: action.payload, temDependente: null, listaDeAlunos: null };
   }
