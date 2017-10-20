@@ -107,7 +107,7 @@ class Login extends Component {
           multiplosUsuarios: false,
           modalEstaAberto: false,
           listaDeAlunos: null,
-          usuario: nextProps.listaDeAlunos[0]
+          usuario: nextProps.listaDeAlunos[0] 
         });
       }
 
