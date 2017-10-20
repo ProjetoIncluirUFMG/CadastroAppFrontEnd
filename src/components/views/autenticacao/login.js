@@ -72,6 +72,7 @@ class Login extends Component {
   }
 
 	submeterFormulario(formProps) {
+    console.log("this.state.usuario: ", this.state.usuario);
     formProps.id_aluno = this.state.usuario.id_aluno;
     this.props.loginUsuario(formProps);
   }
