@@ -96,9 +96,12 @@ class Login extends Component {
     if (this.props.temDependente !== nextProps.temDependente && 
         nextProps.temDependente !== null) {
 
+      console.log("teste");
+
       this.setState({ preCarregandoDependentes: false });
 
       if (nextProps.temDependente) {
+        console.log("teste1");
         this.setState({
           multiplosUsuarios: true,
           modalEstaAberto: true,
@@ -106,6 +109,7 @@ class Login extends Component {
           usuario: null
         });
       } else if (!nextProps.temDependente){
+        console.log("teste2");
         this.setState({
           multiplosUsuarios: false,
           modalEstaAberto: false,
