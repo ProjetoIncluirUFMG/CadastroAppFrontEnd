@@ -90,18 +90,12 @@ class Login extends Component {
     // Redirecionar usuario para pagina principal depois do login
     if (nextProps.usuarioAutenticado) return this.props.history.push('/');
 
-    console.log("this.props.temDependente: ", this.props.temDependente);
-    console.log("nextProps.temDependente: ", nextProps.temDependente);
-
     if (this.props.temDependente !== nextProps.temDependente && 
         nextProps.temDependente !== null) {
-
-      console.log("teste");
 
       this.setState({ preCarregandoDependentes: false });
 
       if (nextProps.temDependente) {
-        console.log("teste1");
         this.setState({
           multiplosUsuarios: true,
           modalEstaAberto: true,
@@ -109,8 +103,6 @@ class Login extends Component {
           usuario: null
         });
       } else if (!nextProps.temDependente){
-        console.log("teste2");
-        console.log("nextProps.listaDeAlunos: ", nextProps.listaDeAlunos);
         this.setState({
           multiplosUsuarios: false,
           modalEstaAberto: false,
