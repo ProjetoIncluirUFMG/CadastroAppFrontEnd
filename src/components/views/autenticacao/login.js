@@ -110,6 +110,7 @@ class Login extends Component {
         });
       } else if (!nextProps.temDependente){
         console.log("teste2");
+        console.log("nextProps.listaDeAlunos: ", nextProps.listaDeAlunos);
         this.setState({
           multiplosUsuarios: false,
           modalEstaAberto: false,
