@@ -72,7 +72,6 @@ class Login extends Component {
   }
 
 	submeterFormulario(formProps) {
-    console.log("this.state.usuario: ", this.state.usuario);
     formProps.id_aluno = this.state.usuario.id_aluno;
     this.props.loginUsuario(formProps);
   }
@@ -90,6 +89,9 @@ class Login extends Component {
 
     // Redirecionar usuario para pagina principal depois do login
     if (nextProps.usuarioAutenticado) return this.props.history.push('/');
+
+    console.log("this.props.temDependente: ", this.props.temDependente);
+    console.log("nextProps.temDependente: ", nextProps.temDependente);
 
     if (this.props.temDependente !== nextProps.temDependente && 
         nextProps.temDependente !== null) {
