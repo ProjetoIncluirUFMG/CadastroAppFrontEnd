@@ -8,7 +8,7 @@ import { Router, Route } from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 import createBrowserHistory from 'history/createBrowserHistory'
 
-import registerServiceWorker from './registerServiceWorker';
+//import registerServiceWorker from './registerServiceWorker';
 
 import App from './components/App.js';
 import Home from './components/views/Home';
