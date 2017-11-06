@@ -9,7 +9,7 @@ deploy:
     secure: j7b1uCok+eOV92jrn3mGEkSA8dsZ8ol+x/Q4c4HEijYg++R11t3fuyZDinkgaQm+hUmgqG+POCIXxXqC04rQZRnGkzHW9NiulgA0Dk7O7UsZdTzlbM+GbWeY3gp3Z+G+5vTFKaSMGJbeE9t9TaH77BUHzQig0SGLwi6g5tesqsuu6rg+3x6wAPb5Pe66yj8WbIA1VSxk2iTLtFy2cVurP7FNzcVI9ikPXwcBTCM5Kc2VpVirmIT1hIvwmmIHvS6XZUbEE2g4i7K6a8A07It5u4LjFYyfh/3lTjlihQ1mvbaII8hrnTL8xJV1V8xjx2Nf9k3A3kRV7zHKFN+SRy3F0m1PuYTAPfkaV5R+NcfPGxrHG37fFzIEuTdDFuTJOWuFEgnyJwD07pg8FvL9ovm2JfJmEdLUni6s3ghPN1aO/j94YFM+Aa3dWIL973ayF3nGU45l/vXsV31FYqAVrm8qjSGOYiHZ4r9xN4BvRYLWhWoQH4Otbhy341TYCLgvcYTHHTlxzoC0Su6QRFOWk0BMHjKyPJSeUwksCbisgQMPmVPe2ymQ7IwQb1yC/zEwnRPBl3vGAz8ffTMXUW+8e/z3myHamFl66l74ozRj8+jgtv2Pi+n/fLwLfGy1tkHuSeGdgG7dYwcENLTqEUWJw+a8qFVb5dRxXE2Pg4DjVAf1G0Y=
   bucket: cadastro.projetoincluir.net
   region: sa-east-1
-  local_dir: build
+  local_dir: dist
   skip_cleanup: true
   on:
     repo: ProjetoIncluirUFMG/CadastroFrontEnd
