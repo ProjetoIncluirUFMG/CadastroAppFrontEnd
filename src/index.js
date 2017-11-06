@@ -10,7 +10,7 @@ import createBrowserHistory from 'history/createBrowserHistory'
 
 import registerServiceWorker from './registerServiceWorker';
 
-import App from './components/App';
+import App from './components/App.js';
 import Home from './components/views/Home';
 import Cadastro from './components/views/Cadastro';
 import Login from './components/views/Login';
