@@ -1,0 +1,35 @@
+.login .alert-warning.alerta {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.login .btn-space {
+	margin-right: 5px;
+}
+
+.login .top_space {
+	padding-top: 20px;
+}
+
+.login .clearfix {
+  clear: left;
+}
+
+.login .breakline {
+  margin: 10px 0;
+}
+
+.login .erro {
+	margin-bottom: 0px;
+	margin-top: 15px;
+	width: 100%;
+}
+
+.login .carregando {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 1px solid #ccc;
+  background-color: #f3f3f3;
+}

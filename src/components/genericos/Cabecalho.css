@@ -1,0 +1,70 @@
+.cabecalho .navbar-inner {
+    min-height: 0px;
+}
+
+.cabecalho .navbar-brand,
+.cabecalho .navbar-nav li a {
+  line-height: 60px;
+  height: 80px;
+  padding-top: 10px;
+}
+
+.cabecalho .navbar-inverse {
+  background-color: white;
+}
+
+.cabecalho .navbar-inverse .navbar-nav>li>a {
+  color: black;
+}
+
+.cabecalho .navbar-inverse .navbar-nav>li>a:hover {
+  color: #9d9d9d;
+}
+
+.cabecalho .navbar-inverse .navbar-nav>li>a:focus {
+  color: black;
+  font-weight: bold!important;
+}
+
+.cabecalho .navbar-inverse .navbar-toggle:focus,
+.cabecalho .navbar-inverse .navbar-toggle:hover {
+  background-color: white;
+}
+
+.cabecalho .navbar-inverse .navbar-toggle .icon-bar {
+  background-color: black;
+}
+
+.cabecalho .navbar-toggle.collapsed:hover {
+  background-color: #9d9d9d;
+}
+
+.cabecalho .navbar-toggle.collapsed .icon-bar {
+  background-color: black;
+}
+
+.cabecalho .opcao-menu .nao-selecionado {
+  font-weight: normal;
+}
+
+.cabecalho .opcao-menu .selecionado {
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .cabecalho .nav.navbar-nav.pull-right {
+    float: left!important;
+  }
+
+  .cabecalho .navbar-brand {
+    padding: 0px;
+    padding-left: 10px;
+  }
+
+  .cabecalho .navbar-brand,
+  .cabecalho .navbar-nav li a {
+    line-height: 40px;
+    height: 50px;
+    padding-top: 0px;
+  }
+}

@@ -1,8 +1,0 @@
-1) Adicionar flag de "sou pai" no cadastro"
-2) Adicionar um endpoint para checar se o email eh de um pai ou nao
-3) Modificar esqueci minha senha para verificar se eh pai ou nao (mesmo do login)
-4) Testar JWT no middleware (validar)
-   Programar uma feature para validar o JWT antes de mandar um http request (verificar validade no browser)
-5) adicionar nome do usuario no topo quando logado + icone
-6) Nao retornar senha hasheada para o front
-7) Adicionar local-db e etc no DNS

@@ -1,31 +1,30 @@
-import jQuery from 'jquery'
-global.jQuery = jQuery
-global.jquery = jQuery // jquery lowercase  was the solution
-global.$ = jQuery
-let Bootstrap = require('bootstrap')
-
-import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.min.css';
-import '!style-loader!css-loader!react-datepicker/dist/react-datepicker.css';
+import jQuery from 'jquery';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { Router, Route, withRouter } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 import createBrowserHistory from 'history/createBrowserHistory'
-import jwt_decode from 'jwt-decode';
 
-import App from './components/app';
-import AutenticacaoRequerida from './components/genericos/autenticacao_requerida';
-import Home from './components/views/home';
-import Cadastro from './components/views/autenticacao/cadastro';
-import Login from './components/views/autenticacao/login';
-import EsqueciSenha from './components/views/autenticacao/esqueci_senha';
-import ResetarSenha from './components/views/autenticacao/resetar_senha';
+import registerServiceWorker from './registerServiceWorker';
+
+import App from './components/App';
+import Home from './components/views/Home';
+import Cadastro from './components/views/Cadastro';
+import Login from './components/views/Login';
+import EsqueciSenha from './components/views/EsqueciSenha';
+import ResetarSenha from './components/views/ResetarSenha';
 
 import reducers from './reducers';
 import { AUTENTICAR_USUARIO } from './actions/autenticacao/tipos';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import './index.css';
+
+global.jQuery = global.jquery = global.$ = jQuery;
+require('bootstrap');
 
 const customHistory = createBrowserHistory();
 
@@ -34,8 +33,8 @@ const jwtValidation = store => next => action => {
   // TODO
   //console.log("action: ", action);
   if (token) {
-    token = jwt_decode(token);
-    console.log(token);
+    //token = jwt_decode(token);
+    //console.log(token);
   }
   return next(action);
 }
@@ -64,4 +63,5 @@ ReactDOM.render(
       </App>
     </Router>
   </Provider>
-  , document.querySelector('.container'));
+  , document.getElementById('root'));
+registerServiceWorker();

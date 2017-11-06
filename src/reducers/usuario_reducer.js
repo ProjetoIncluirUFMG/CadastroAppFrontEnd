@@ -15,6 +15,7 @@ export default function(state = {}, action) {
       return {...state, erro: action.payload, encontrados: null };
     case LIMPAR_LISTA_USUARIOS:
       return {...state, encontrados: null };
+    default:
+      return state;
   }
-  return state;
 }

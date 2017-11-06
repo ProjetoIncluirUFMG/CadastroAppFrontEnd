@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { Field, reduxForm , formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
+import Loading from 'react-loading-animation';
 import PropTypes from 'prop-types'
 import Modal from 'react-modal';
-import Loading from 'react-loading-animation';
 
-import * as actions from '../../../actions/autenticacao';
+import './Login.css';
 
-import * as validacoes from '../../genericos/formulario/utils/validacoesDeFormulario';
-import * as normalizacoes from '../../genericos/formulario/utils/normalizacaoDeFormulario';
+import * as actions from '../../actions/autenticacao';
 
-import Input from '../../genericos/formulario/Input';
+import * as validacoes from '../genericos/formulario/utils/validacoesDeFormulario';
+import * as normalizacoes from '../genericos/formulario/utils/normalizacaoDeFormulario';
+
+import Input from '../genericos/formulario/Input';
 
 const estiloDoModal = {
   content : {
@@ -24,14 +26,19 @@ const estiloDoModal = {
   }
 };
 
-const selector = formValueSelector('esqueci_senha');
+const selector = formValueSelector('login');
 
-class EsqueciSenha extends Component {
+class Login extends Component {
 
 	static propTypes = {
 		mensagemDeErro: PropTypes.string,
-		recuperarSenha: PropTypes.func.isRequired,
-    emailEnviado: PropTypes.bool,
+		loginUsuario: PropTypes.func.isRequired,
+    usuarioAutenticado: PropTypes.bool,
+    temDependente: PropTypes.bool,
+    listaDeAlunos: PropTypes.array,
+
+    buscarDependentesUsuario: PropTypes.func.isRequired,
+    limparDependentes: PropTypes.func.isRequired,
 
 		valid: PropTypes.bool.isRequired,
 		handleSubmit: PropTypes.func.isRequired,
@@ -46,33 +53,45 @@ class EsqueciSenha extends Component {
   constructor() {
 		super();
 		this.state = {
-      modalEnvioDeEmailEstaAberto: false,
-      enviandoEmail: false,
       multiplosUsuarios: null,
       usuario: null,
       listaDeAlunos: [],
-      modalDeDependentesEstaAberto: false,
+      modalEstaAberto: false,
       preCarregandoDependentes: false
 		};
 
-    this.abrirModalEnvioDeEmail = this.abrirModalEnvioDeEmail.bind(this);
-    this.fecharModalEnvioDeEmail = this.fecharModalEnvioDeEmail.bind(this);
+    this.abrirModal = this.abrirModal.bind(this);
+    this.fecharModal = this.fecharModal.bind(this);
 	}
 
-  abrirModalEnvioDeEmail() {
-    this.setState({ modalEnvioDeEmailEstaAberto: true });
+  abrirModal() {
+    this.setState({ modalEstaAberto: true });
+  }
+
+  fecharModal() {
+    this.setState({ modalEstaAberto: false });
+  }
+
+	submeterFormulario(formProps) {
+    formProps.id_aluno = this.state.usuario.id_aluno;
+    this.props.loginUsuario(formProps);
+  }
+
+  selecionarAlunoDaLista(aluno) {
+    this.setState({
+      multiplosUsuarios: false,
+      listaDeAlunos: null,
+      modalEstaAberto: false,
+      usuario: aluno
+    });
   }
 
   componentWillReceiveProps(nextProps) {
-    
-    this.setState({ enviandoEmail: false });
-    
-    if (nextProps.emailEnviado === true) {
-      this.props.resetarEsqueciSenha();
-      this.abrirModalEnvioDeEmail();
-    }
 
-    if (this.props.temDependente !== nextProps.temDependente && 
+    // Redirecionar usuario para pagina principal depois do login
+    if (nextProps.usuarioAutenticado) return this.props.history.push('/');
+
+    if (this.props.temDependente !== nextProps.temDependente &&
         nextProps.temDependente !== null) {
 
       this.setState({ preCarregandoDependentes: false });
@@ -80,14 +99,14 @@ class EsqueciSenha extends Component {
       if (nextProps.temDependente) {
         this.setState({
           multiplosUsuarios: true,
-          modalDeDependentesEstaAberto: true,
+          modalEstaAberto: true,
           listaDeAlunos: nextProps.listaDeAlunos,
           usuario: null
         });
       } else if (!nextProps.temDependente){
         this.setState({
           multiplosUsuarios: false,
-          modalDeDependentesEstaAberto: false,
+          modalEstaAberto: false,
           listaDeAlunos: null,
           usuario: nextProps.listaDeAlunos[0]
         });
@@ -97,31 +116,13 @@ class EsqueciSenha extends Component {
     }
 
     // Validar se usuário tem dependentes
-    if (nextProps.cpf && 
+    if (nextProps.cpf &&
         this.props.cpf !== nextProps.cpf &&
         validacoes.cpf(nextProps.cpf) === undefined) {
       this.setState({ preCarregandoDependentes: true });
       this.props.buscarDependentesUsuario(nextProps.cpf);
     }
-	}
 
-  fecharModalEnvioDeEmail() {
-    this.setState({ modalEnvioDeEmailEstaAberto: false });
-    this.props.history.push('/');
-  }
-
-	submeterFormulario(formProps) {
-    this.setState({ enviandoEmail: true });
-    this.props.recuperarSenha(this.state.usuario);
-  }
-
-  selecionarAlunoDaLista(aluno) {
-    this.setState({
-      multiplosUsuarios: false,
-      listaDeAlunos: null,
-      modalDeDependentesEstaAberto: false,
-      usuario: aluno
-    });
   }
 
 	mostrarAlertas() {
@@ -143,9 +144,15 @@ class EsqueciSenha extends Component {
     const emProgresso = !valid || pristine || submitting;
 
     return (
-			<div className="esqueci_senha">
-        <form onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
-				
+			<div className="login">
+        <form autoComplete="off" onSubmit={handleSubmit(this.submeterFormulario.bind(this))}>
+
+          {this.state.preCarregandoDependentes ?
+          <div className="carregando">
+            <Loading />
+            <b>Carregando...</b>
+          </div> : <span></span>}
+
           <Field
             label="CPF"
             name="cpf"
@@ -160,28 +167,30 @@ class EsqueciSenha extends Component {
             normalize={normalizacoes.cpf}
           />
 
-          {this.state.preCarregandoDependentes ?
-          <div className="carregando">
-            <Loading />
-            <b>Carregando...</b>
-          </div> : <span></span>}
-
-          {this.state.enviandoEmail ?
-          <div className="carregando">
-            <Loading />
-            <b>Enviando email...</b>
-          </div> : <span></span>}
+          { this.state.multiplosUsuarios === false ?
+					<Field
+						label="Senha"
+						name="senha"
+						type="password"
+						component={Input}
+						validate={[
+							validacoes.obrigatorio,
+							validacoes.valorMinimoDeCaracteres(8),
+							validacoes.valorMaximoDeCaracteres(12)
+						]}
+						style={{width: "100%"}}
+					/> : <div className="clearfix breakline"/>}
 
 	        {this.mostrarAlertas()}
 
 					<div className="clearfix top_space">
-            <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Recuperar Senha</button>
+            <button type="submit" className={'btn btn-space btn-primary ' + (emProgresso ? 'disabled' : '')} disabled={emProgresso}>Login</button>
+						<button className="btn btn-default" onClick={() => this.props.history.push('/esqueciSenha')}>Esqueci minha senha</button>
           </div>
-	      </form>
 
-        { this.state.modalDeDependentesEstaAberto ?
+          {this.state.modalEstaAberto ?
           <Modal
-            isOpen={this.state.modalDeDependentesEstaAberto}
+            isOpen={this.state.modalEstaAberto}
             style={estiloDoModal}
             contentLabel='Apresentar alunos dependentes'
           >
@@ -213,39 +222,24 @@ class EsqueciSenha extends Component {
             </div>
           </Modal>
           : <span></span> }
-
-        { this.state.modalEnvioDeEmailEstaAberto ?
-        <Modal
-          isOpen={this.state.modalEnvioDeEmailEstaAberto}
-          style={estiloDoModal}
-          contentLabel='Email enviado com sucesso!'
-        >
-          <div className='cadastro'>
-            <h2>Email enviado com sucesso!</h2>
-            <h2>Abra seu email para continuar o processo de recuperação de senha.</h2>
-            <br/>
-            <div>
-              <button className='btn btn-primary btn-lg botao' onClick={this.fecharModalEnvioDeEmail}>Fechar</button>
-            </div>
-          </div>
-        </Modal> : <span></span> }
+	      </form>
 			</div>
     )
   }
 }
 
-const EsqueciSenhaForm = reduxForm({
-  form: 'esqueci_senha'
-})(EsqueciSenha)
+const LoginForm = reduxForm({
+  form: 'login'
+})(Login)
 
 function mapStateToProps(state) {
   return {
     cpf: selector(state, 'cpf'),
-    mensagemDeErro: state.esqueci_senha.erro,
-    emailEnviado: state.esqueci_senha.emailEnviado,
+    mensagemDeErro: state.autenticacao.erro,
+    usuarioAutenticado: state.autenticacao.autenticado,
     temDependente: state.autenticacao.temDependente,
     listaDeAlunos: state.autenticacao.listaDeAlunos,
   };
 }
 
-export default connect(mapStateToProps, actions)(EsqueciSenhaForm);
+export default connect(mapStateToProps, actions)(LoginForm);

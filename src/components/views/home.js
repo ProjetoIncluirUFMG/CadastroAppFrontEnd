@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
-import ListaCursos from '../genericos/lista_cursos';
+import './Home.css';
+
+import ListaCursos from '../genericos/ListaCursos';
 
 class Home extends Component {
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SetupReCAPTCH from './setup';
+import {} from './setup';
 import ReCAPTCHA from 'react-google-recaptcha';
 import PropTypes from 'prop-types';
 
@@ -13,7 +13,7 @@ export default class Captcha extends Component {
 
 	render() {
 		const { input, style, apiKey } = this.props;
-		
+
 		return (
 			<div className="pull-left" style={style}>
 				<ReCAPTCHA

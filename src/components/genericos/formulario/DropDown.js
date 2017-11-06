@@ -15,8 +15,8 @@ export default class DropDown extends Component {
     return touched && ((error || warning) && <div className="alert alert-warning alerta">{error || warning}</div>)
   }
 
-  renderizarOpcoes = (opcao) => (
-    <option key={opcao} value={opcao}>{opcao}</option>
+  renderizarOpcoes = (opcao, index) => (
+    <option key={`${opcao}-${index}`} value={opcao}>{opcao}</option>
   )
 
   render() {

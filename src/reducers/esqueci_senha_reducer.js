@@ -12,6 +12,7 @@ export default function(state = {}, action) {
       return {...state, erro: action.payload, emailEnviado: false };
     case RESETAR_RECUPERACAO_DE_SENHA:
       return {...state, erro: '', emailEnviado: false };
+    default:
+      return state;
   }
-  return state;
 }

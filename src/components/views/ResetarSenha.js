@@ -5,10 +5,12 @@ import PropTypes from 'prop-types'
 import Modal from 'react-modal';
 import Loading from 'react-loading-animation';
 
-import * as actions from '../../../actions/autenticacao';
+import './ResetarSenha.css';
 
-import * as validacoes from '../../genericos/formulario/utils/validacoesDeFormulario';
-import Input from '../../genericos/formulario/Input';
+import * as actions from '../../actions/autenticacao';
+
+import * as validacoes from '../genericos/formulario/utils/validacoesDeFormulario';
+import Input from '../genericos/formulario/Input';
 
 const estiloDoModal = {
   content : {

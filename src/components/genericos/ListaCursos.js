@@ -42,7 +42,7 @@ class ListaCursos extends Component {
 										{disciplina.nome_disciplina} <i className="glyphicon glyphicon-chevron-down pull-right"></i>
 									</a>
 									<div className="collapse list-group-submenu" id={"SubMenu" + disciplina.id_disciplina}>
-										<a href="#" className="list-group-item" data-parent={"#SubMenu" + disciplina.id_disciplina}>
+										<a className="list-group-item" data-parent={"#SubMenu" + disciplina.id_disciplina}>
 										{disciplina.ementa_disciplina ? disciplina.ementa_disciplina : "Nenhuma ementa encontrada."}
 										</a>
 									</div>

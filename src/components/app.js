@@ -1,9 +1,12 @@
-import React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 
-import Cabecalho from './genericos/cabecalho';
+import Cabecalho from './genericos/Cabecalho';
+
+import LogoProjetoIncluir from '../assets/logo-projeto-incluir.png';
+
+import './App.css';
 
 class App extends Component {
 
@@ -11,7 +14,7 @@ class App extends Component {
 		match: PropTypes.object.isRequired,
 		location: PropTypes.object.isRequired,
 		history: PropTypes.object.isRequired
-	}
+	};
 
 	render() {
 
@@ -25,7 +28,7 @@ class App extends Component {
 
 		return (
 			<div className="app">
-				<Cabecalho {...this.props} />
+				<Cabecalho {...this.props} logoImage={LogoProjetoIncluir} />
 				<div className="espaco" />
 				{childrenWithProps}
 			</div>

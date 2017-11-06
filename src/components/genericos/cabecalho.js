@@ -3,20 +3,21 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
 
-import * as actions from '../../actions/autenticacao';
+import './Cabecalho.css';
 
-const logoImgSrc = '../../../images/logo-projeto-incluir.png';
+import * as actions from '../../actions/autenticacao';
 
 class Cabecalho extends Component {
 
   static propTypes = {
-		autenticado: PropTypes.bool,
-    logoutUsuario: PropTypes.func,
+		autenticado: PropTypes.bool.isRequired,
+    logoutUsuario: PropTypes.func.isRequired,
+    logoImage: PropTypes.string.isRequired,
 
 		match: PropTypes.object.isRequired,
 		location: PropTypes.object.isRequired,
 		history: PropTypes.object.isRequired
-  }
+  };
 
   constructor() {
     super();
@@ -48,12 +49,12 @@ class Cabecalho extends Component {
     } else {
       return [
         <li className="nav-item opcao-menu" key={1}>
-          <Link className="nav-link" to="/login">
+          <Link className="nav-link" to="/login" data-toggle="collapse" data-target="#navbar">
           {this.state.localizacaoAtual === '/login' ? <span className="selecionado">Login</span> : <span className="nao-selecionado">Login</span>}
           </Link>
         </li>,
         <li className="nav-item opcao-menu" key={2}>
-          <Link className="nav-link" to="/cadastro">
+          <Link className="nav-link" to="/cadastro" data-toggle="collapse" data-target="#navbar">
           {this.state.localizacaoAtual === '/cadastro' ? <span className="selecionado">Cadastro</span> : <span className="nao-selecionado">Cadastro</span>}
           </Link>
         </li>
@@ -75,7 +76,7 @@ class Cabecalho extends Component {
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <Link to="/" className="navbar-brand"><img src={logoImgSrc} height={"100%"}/></Link>
+              <Link to="/" className="navbar-brand"><img alt="Logo Projeto Incluir" src={this.props.logoImage} height={"100%"}/></Link>
             </div>
             <div id="navbar" className="navbar-collapse collapse">
               <ul className="nav navbar-nav pull-right">

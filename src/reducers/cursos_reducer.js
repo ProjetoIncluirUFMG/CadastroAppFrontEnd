@@ -14,6 +14,7 @@ export default function(state = INITIAL_STATE, action) {
       return {...state, erro: null, lista: action.payload };
     case ERRO_NOS_CURSOS:
       return {...state, erro: action.payload, lista: [] };
+    default:
+      return state;
   }
-  return state;
 }

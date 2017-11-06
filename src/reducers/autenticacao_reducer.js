@@ -11,7 +11,12 @@ import {
   CADASTRAR_USUARIO
 } from '../actions/usuario/tipos';
 
-export default function(state = {}, action) {
+const ESTADO_INICIAL = {
+  erro: '',
+  autenticado: false
+};
+
+export default function(state = ESTADO_INICIAL, action) {
   switch (action.type) {
     case CADASTRAR_USUARIO:
     case AUTENTICAR_USUARIO:
@@ -26,6 +31,7 @@ export default function(state = {}, action) {
       return {...state, erro: '', temDependente: null, listaDeAlunos: null };
     case ERRO_NA_VALIDACAO_DE_DEPENDENCIA:
       return {...state, erro: action.payload, temDependente: null, listaDeAlunos: null };
+    default:
+      return state;
   }
-  return state;
 }

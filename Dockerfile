@@ -1,4 +1,4 @@
-FROM node:4-onbuild
+FROM node:latest
 
 MAINTAINER danielmapar@gmail.com
 
@@ -24,4 +24,4 @@ ENV PORT 8003
 
 EXPOSE  8003
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
