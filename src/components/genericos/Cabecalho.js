@@ -41,10 +41,19 @@ class Cabecalho extends Component {
   }
 
   renderizarOpcoes() {
+    console.log("localStorage.getItem('piUser'): ", localStorage.getItem('piUser'));
     if (this.props.autenticado) {
+      const usuario = JSON.parse(localStorage.getItem('piUser'));
       return (
-        <li className="nav-item" key={1}>
-          <a className="nav-link" style={{cursor: 'pointer'}} onClick={this.props.logoutUsuario}>Sair</a>
+        <li className="dropdown">
+          <a className="dropdown-toggle" data-toggle="dropdown" href="#">           {usuario.nome}&nbsp;<span className="caret"></span>
+          </a>
+          <ul className="dropdown-menu">
+            <li className="nav-item" key={2}>
+              <a href="" className="nav-link"
+                onClick={this.props.logoutUsuario}>Sair</a>
+            </li>
+          </ul>
         </li>);
     } else {
       return [
@@ -92,7 +101,8 @@ class Cabecalho extends Component {
 
 function mapStateToProps(state) {
   return {
-    autenticado: state.autenticacao.autenticado
+    autenticado: state.autenticacao.autenticado,
+    usuario: state.autenticacao.usuario,
   };
 }
 

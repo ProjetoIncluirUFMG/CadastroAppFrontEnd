@@ -7,18 +7,20 @@ export default class Input extends Component {
     meta: PropTypes.object.isRequired,
     input: PropTypes.object.isRequired,
     label: PropTypes.string.isRequired,
+    placeholder: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
+    obrigatorio: PropTypes.bool,
     style: PropTypes.object.isRequired
   }
 
   render() {
-    const { input, label, type, style, meta: { touched, error, warning } } = this.props;
+    const { input, label, placeholder, obrigatorio, type, style, meta: { touched, error, warning } } = this.props;
 
     return (
       <div className="pull-left" style={style}>
-        <label>{label}</label>
+        <label>{label} {obrigatorio ? <span style={{color: 'red'}}>*</span> : <span/>}</label>
         <fieldset className="form-group">
-          <input className="form-control" {...input} placeholder={label} type={type}/>
+          <input className="form-control" {...input} placeholder={placeholder} type={type}/>
           {touched && ((error || warning) && <div className="alert alert-warning alerta">{error || warning}</div>)}
         </fieldset>
       </div>

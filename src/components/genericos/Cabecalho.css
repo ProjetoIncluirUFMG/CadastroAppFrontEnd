@@ -26,6 +26,20 @@
   font-weight: bold!important;
 }
 
+.cabecalho .navbar .navbar-nav .dropdown.open .dropdown-toggle:focus {
+  color: black;
+  font-weight: normal!important;
+}
+
+
+.cabecalho .navbar .navbar-nav .dropdown.open .dropdown-toggle {
+  background-color: #eee;
+}
+
+.cabecalho .navbar .navbar-nav .dropdown .dropdown-toggle {
+  font-weight: normal!important;
+}
+
 .cabecalho .navbar-inverse .navbar-toggle:focus,
 .cabecalho .navbar-inverse .navbar-toggle:hover {
   background-color: white;
@@ -54,6 +68,7 @@
 @media (max-width: 768px) {
   .cabecalho .nav.navbar-nav.pull-right {
     float: left!important;
+    width: 100%;
   }
 
   .cabecalho .navbar-brand {
@@ -66,5 +81,13 @@
     line-height: 40px;
     height: 50px;
     padding-top: 0px;
+  }
+
+  .cabecalho .nav.navbar-nav .dropdown.open .dropdown-menu .nav-item .nav-link {
+    color: black;
+  }
+
+  .cabecalho .nav.navbar-nav .dropdown.open .dropdown-menu .nav-item .nav-link:hover {
+    color: #9d9d9d;
   }
 }

@@ -156,6 +156,7 @@ class Login extends Component {
           <Field
             label="CPF"
             name="cpf"
+            placeholder="CPF"
             type="text"
             component={Input}
             autocomplete="off"
@@ -171,6 +172,7 @@ class Login extends Component {
 					<Field
 						label="Senha"
 						name="senha"
+            placeholder="Senha"
 						type="password"
 						component={Input}
 						validate={[

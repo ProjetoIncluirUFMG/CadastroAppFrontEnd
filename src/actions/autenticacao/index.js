@@ -41,6 +41,7 @@ export function loginUsuario({senha, id_aluno}) {
           type: AUTENTICAR_USUARIO
         });
 
+        localStorage.setItem('piUser', JSON.stringify(response.data));
         localStorage.setItem('piToken', response.data.jwt);
       })
       .catch(response => {

@@ -107,36 +107,58 @@ class Cadastro extends Component {
 
     if (usuario.id_aluno !== null) this.props.change('id_aluno', usuario.id_aluno);
 
-		if (usuario.nome_aluno !== null) this.props.change('nome_aluno', usuario.nome_aluno);
-    if (usuario.email !== null) this.props.change('email', usuario.email);
-
+		if (usuario.nome_aluno !== null) {
+      this.atualizarCampo('nome_aluno', usuario.nome_aluno);
+    }
+    if (usuario.email !== null) {
+      this.atualizarCampo('email', usuario.email);
+    }
 		if (usuario.is_cpf_responsavel) {
-      this.props.change('is_cpf_responsavel', usuario.is_cpf_responsavel);
-      this.props.change('nome_responsavel', usuario.nome_responsavel);
+      this.atualizarCampo('is_cpf_responsavel', usuario.is_cpf_responsavel);
+      this.atualizarCampo('nome_responsavel', usuario.nome_responsavel);
     }
-
-		if (usuario.rg !== null) {
-      // Remover caracteres do RG
-      this.props.change('numero_rg', usuario.rg.replace(/\D/g,''));
-      // Remover numeros do RG
-      this.props.change('uf_rg', usuario.rg.replace(/[^a-zA-Z]+/,''));
+		if (usuario.telefone !== null) {
+      this.atualizarCampo('telefone', normalizacoes.telefoneFixo(usuario.telefone.substr(1)));
     }
-
-		if (usuario.telefone !== null) this.props.change('telefone', normalizacoes.telefoneFixo(usuario.telefone.substr(1)));
-		if (usuario.celular !== null) this.props.change('celular', normalizacoes.telefoneCelular(usuario.celular.substr(1)));
-		if (usuario.sexo !== null) this.props.change('sexo', String(usuario.sexo));
-		if (usuario.data_nascimento !== null) this.props.change('data_nascimento', moment(usuario.data_nascimento).format('DD/MM/YYYY'));
-
-    if (usuario.cep !== null) this.props.change('cep', normalizacoes.cep(usuario.cep));
-    if (usuario.estado !== null) this.props.change('estado', usuario.estado);
-    if (usuario.cidade !== null) this.props.change('cidade', usuario.cidade);
-    if (usuario.endereco !== null) this.props.change('endereco', usuario.endereco);
-    if (usuario.bairro !== null) this.props.change('bairro', usuario.bairro);
-    if (usuario.numero !== null) this.props.change('numero', usuario.numero);
-		if (usuario.complemento !== null) this.props.change('complemento', usuario.complemento);
-
-		if (usuario.escolaridade !== null) this.props.change('escolaridade', usuario.escolaridade);
+		if (usuario.celular !== null) {
+      this.atualizarCampo('celular', normalizacoes.telefoneCelular(usuario.celular.substr(1)));
+    }
+		if (usuario.sexo !== null) {
+      this.atualizarCampo('sexo', String(usuario.sexo));
+    }
+		if (usuario.data_nascimento !== null) {
+      this.atualizarCampo('data_nascimento', moment(usuario.data_nascimento).format('DD/MM/YYYY'));
+    }
+    if (usuario.cep !== null) {
+      this.atualizarCampo('cep', normalizacoes.cep(usuario.cep));
+    }
+    if (usuario.estado !== null)  {
+      this.atualizarCampo('estado', usuario.estado);
+    }
+    if (usuario.cidade !== null) {
+      this.atualizarCampo('cidade', usuario.cidade);
+    }
+    if (usuario.endereco !== null) {
+      this.atualizarCampo('endereco', usuario.endereco);
+    }
+    if (usuario.bairro !== null) {
+      this.atualizarCampo('bairro', usuario.bairro);
+    }
+    if (usuario.numero !== null) {
+      this.atualizarCampo('numero', usuario.numero);
+    }
+		if (usuario.complemento !== null) {
+      this.atualizarCampo('complemento', usuario.complemento);
+    }
+		if (usuario.escolaridade !== null) {
+      this.atualizarCampo('escolaridade', usuario.escolaridade)
+    }
 	}
+
+  atualizarCampo(campo, valor) {
+    this.props.change(campo, valor);
+    this.props.touch(campo);
+  }
 
 	componentWillReceiveProps(nextProps) {
     this.setState({
@@ -244,6 +266,8 @@ class Cadastro extends Component {
 
           <Field
             label="CPF"
+            placeholder="CPF"
+            obrigatorio
             name="cpf"
             type="text"
             component={Input}
@@ -257,6 +281,7 @@ class Cadastro extends Component {
 
           <Field
 						label="CPF do Responsável"
+            placeholder="CPF do Responsável"
             name="is_cpf_responsavel"
             component={CheckBox}
             style={{width: "20%"}}
@@ -265,6 +290,8 @@ class Cadastro extends Component {
           {this.props.is_cpf_responsavel ?
           <Field
 						label="Nome do Responsável"
+            placeholder="Nome do Responsável"
+            obrigatorio
             name="nome_responsavel"
 						type="text"
             component={Input}
@@ -283,7 +310,9 @@ class Cadastro extends Component {
           </div> : <span></span>}
 
           <Field
-						label="Senha"
+						label="Senha (mínimo de 8 digitos, máximo de 12)"
+            placeholder="Senha"
+            obrigatorio
 						name="senha"
 						type="password"
 						component={Input}
@@ -297,6 +326,8 @@ class Cadastro extends Component {
 
           <Field
 						label="Confirmar Senha"
+            placeholder="Confirmar Senha"
+            obrigatorio
 						name="confirmarSenha"
 						type="password"
 						component={Input}
@@ -311,6 +342,8 @@ class Cadastro extends Component {
 
           <Field
 						label="Nome do Aluno"
+            placeholder="Nome do Aluno"
+            obrigatorio
 						name="nome_aluno"
 						type="text"
 						component={Input}
@@ -324,6 +357,8 @@ class Cadastro extends Component {
 
           <Field
 						label="Email"
+            placeholder="Email"
+            obrigatorio
 						name="email"
 						type="text"
 						component={Input}
@@ -336,6 +371,7 @@ class Cadastro extends Component {
 
           <Field
 						label="Telefone Fixo"
+            placeholder="Telefone Fixo"
 						name="telefone"
 						type="text"
 						component={Input}
@@ -348,6 +384,8 @@ class Cadastro extends Component {
 
           <Field
 						label="Telefone Celular"
+            placeholder="Telefone Celular"
+            obrigatorio
 						name="celular"
 						type="text"
 						component={Input}
@@ -361,6 +399,8 @@ class Cadastro extends Component {
 
           <Field
 						label="Sexo"
+            placeholder="Sexo"
+            obrigatorio
 						name="sexo"
             component={RadioGroup}
             validate={validacoes.obrigatorio}
@@ -373,8 +413,9 @@ class Cadastro extends Component {
 
           <Field
             label="Data de Nascimento"
-            name="data_nascimento"
             placeholder="Data de Nascimento"
+            obrigatorio
+            name="data_nascimento"
             type="text"
             component={Input}
             validate={[
@@ -387,6 +428,8 @@ class Cadastro extends Component {
 
           <Field
 						label="Escolaridade"
+            placeholder="Escolaridade"
+            obrigatorio
 						name="escolaridade"
 						component={DropDown}
             opcoes={Escolaridades}
@@ -396,8 +439,9 @@ class Cadastro extends Component {
 
           <Field
             label="CEP"
-            name="cep"
             placeholder="CEP"
+            obrigatorio
+            name="cep"
             type="text"
             component={Input}
             validate={[
@@ -410,6 +454,8 @@ class Cadastro extends Component {
 
           <Field
             label="Estado"
+            placeholder="Estado"
+            obrigatorio
             name="estado"
             component={DropDown}
             opcoes={UFs.map((uf) => Object.keys(uf))}
@@ -419,6 +465,8 @@ class Cadastro extends Component {
 
           <Field
             label="Cidade"
+            placeholder="Cidade"
+            obrigatorio
             name="cidade"
             component={DropDown}
             opcoes={cidades}
@@ -428,8 +476,9 @@ class Cadastro extends Component {
 
           <Field
             label="Endereço"
+            placeholder="Endereço"
+            obrigatorio
             name="endereco"
-            placeholder="Entre seu endereço"
             type="text"
             component={Input}
             validate={validacoes.obrigatorio}
@@ -438,8 +487,9 @@ class Cadastro extends Component {
 
           <Field
             label="Bairro"
-            name="bairro"
             placeholder="Bairro"
+            obrigatorio
+            name="bairro"
             type="text"
             component={Input}
             validate={validacoes.obrigatorio}
@@ -448,8 +498,9 @@ class Cadastro extends Component {
 
           <Field
             label="Número"
-            name="numero"
             placeholder="Número"
+            obrigatorio
+            name="numero"
             type="number"
             component={Input}
             validate={[
@@ -499,7 +550,7 @@ class Cadastro extends Component {
             </div>
           </div>
         </Modal>
-        : <span></span> }
+        : <span/> }
 
         { this.state.modalPreCargaDeAlunosEstaAberto ?
         <Modal
@@ -521,10 +572,10 @@ class Cadastro extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.props.usuarios.map((usuario, key) => {
-                    return (<tr key={key}>
+                  {this.props.usuarios.map((usuario, index) => {
+                    return (<tr key={index}>
                               <td><button type="button" className="btn btn-primary"
-                            onClick={() => { this.prePreencherFormulario(usuario) }}>Selecionar</button></td>
+                                  onClick={() => { this.prePreencherFormulario(usuario) }}>Selecionar</button></td>
                               <td>{usuario.nome_aluno}</td>
                               <td>{usuario.is_cpf_responsavel ? "Sim" : "Não"}</td>
                             </tr>);
@@ -536,7 +587,7 @@ class Cadastro extends Component {
             </div>
           </div>
         </Modal>
-        : <span></span> }
+        : <span/> }
       </div>
     );
   }
@@ -549,10 +600,10 @@ const CadastroForm = reduxForm({
 function mapStateToProps(state) {
   return {
     is_cpf_responsavel: selector(state, 'is_cpf_responsavel'),
-		cpf: selector(state, 'cpf'),
+    cpf: selector(state, 'cpf'),
     estado: selector(state, 'estado'),
     mensagemDeErro: state.usuario.erro,
-		usuarios: state.usuario.encontrados,
+    usuarios: state.usuario.encontrados,
     usuarioAutenticado: state.autenticacao.autenticado,
   };
 }

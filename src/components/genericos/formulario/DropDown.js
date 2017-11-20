@@ -8,6 +8,7 @@ export default class DropDown extends Component {
     opcoes: PropTypes.array.isRequired,
     input: PropTypes.object.isRequired,
     label: PropTypes.string.isRequired,
+    obrigatorio: PropTypes.bool,
     style: PropTypes.object.isRequired
   }
 
@@ -20,10 +21,10 @@ export default class DropDown extends Component {
   )
 
   render() {
-    const { input, label, style, opcoes, meta: { touched, error, warning } } = this.props;
+    const { input, label, style, obrigatorio, opcoes, meta: { touched, error, warning } } = this.props;
     return (
       <div className="pull-left" style={style}>
-        <label>{label}</label>
+        <label>{label} {obrigatorio ? <span style={{color: 'red'}}>*</span> : <span/>}</label>
         <fieldset className="form-group">
           <select className="form-control" {...input}>
             <option value="">Selecionar</option>
