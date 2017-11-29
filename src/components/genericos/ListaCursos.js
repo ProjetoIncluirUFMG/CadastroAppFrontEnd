@@ -44,6 +44,8 @@ class ListaCursos extends Component {
 									<div className="collapse list-group-submenu" id={"SubMenu" + disciplina.id_disciplina}>
 										<a className="list-group-item" data-parent={"#SubMenu" + disciplina.id_disciplina}>
 										{disciplina.ementa_disciplina ? disciplina.ementa_disciplina : "Nenhuma ementa encontrada."}
+                    <hr />
+                    <button type="button" className="btn btn-primary">Matricular</button>
 										</a>
 									</div>
 								</span>

@@ -41,12 +41,11 @@ class Cabecalho extends Component {
   }
 
   renderizarOpcoes() {
-    console.log("localStorage.getItem('piUser'): ", localStorage.getItem('piUser'));
     if (this.props.autenticado) {
       const usuario = JSON.parse(localStorage.getItem('piUser'));
       return (
         <li className="dropdown">
-          <a className="dropdown-toggle" data-toggle="dropdown" href="#">           {usuario.nome}&nbsp;<span className="caret"></span>
+          <a className="dropdown-toggle" data-toggle="dropdown" href="">           {usuario.nome}&nbsp;<span className="caret"></span>
           </a>
           <ul className="dropdown-menu">
             <li className="nav-item" key={2}>

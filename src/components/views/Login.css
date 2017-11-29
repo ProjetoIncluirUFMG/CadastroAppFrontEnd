@@ -3,6 +3,10 @@
   margin-bottom: 0px;
 }
 
+.login.alerta {
+  text-align: center;
+}
+
 .login .btn-space {
 	margin-right: 5px;
 }

@@ -23,8 +23,6 @@ import {
 } from '../api';
 
 export function logoutUsuario() {
-  localStorage.removeItem('piToken');
-
   return {
     type: DESAUTENTICAR_USUARIO
   };
@@ -37,12 +35,12 @@ export function loginUsuario({senha, id_aluno}) {
     axios.post(`${API_URL}/usuario/login`, { senha, id_aluno })
       .then(response => {
 
+        localStorage.setItem('piUser', JSON.stringify(response.data));
+        localStorage.setItem('piToken', response.data.jwt);
+        
         dispatch({
           type: AUTENTICAR_USUARIO
         });
-
-        localStorage.setItem('piUser', JSON.stringify(response.data));
-        localStorage.setItem('piToken', response.data.jwt);
       })
       .catch(response => {
         dispatch({

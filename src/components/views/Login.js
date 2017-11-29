@@ -53,10 +53,11 @@ class Login extends Component {
   constructor() {
 		super();
 		this.state = {
+      modalUsuarioNaoExisteEstaAberto: false,
       multiplosUsuarios: null,
       usuario: null,
       listaDeAlunos: [],
-      modalEstaAberto: false,
+      modalAlunosDependentesEstaAberto: false,
       preCarregandoDependentes: false
 		};
 
@@ -65,14 +66,17 @@ class Login extends Component {
 	}
 
   abrirModal() {
-    this.setState({ modalEstaAberto: true });
+    this.setState({ modalAlunosDependentesEstaAberto: true });
   }
 
   fecharModal() {
-    this.setState({ modalEstaAberto: false });
+    this.setState({ modalAlunosDependentesEstaAberto: false });
   }
 
 	submeterFormulario(formProps) {
+    if (!this.state.usuario) {
+      return this.setState({modalUsuarioNaoExisteEstaAberto: true});
+    }
     formProps.id_aluno = this.state.usuario.id_aluno;
     this.props.loginUsuario(formProps);
   }
@@ -81,7 +85,7 @@ class Login extends Component {
     this.setState({
       multiplosUsuarios: false,
       listaDeAlunos: null,
-      modalEstaAberto: false,
+      modalAlunosDependentesEstaAberto: false,
       usuario: aluno
     });
   }
@@ -99,14 +103,14 @@ class Login extends Component {
       if (nextProps.temDependente) {
         this.setState({
           multiplosUsuarios: true,
-          modalEstaAberto: true,
+          modalAlunosDependentesEstaAberto: true,
           listaDeAlunos: nextProps.listaDeAlunos,
           usuario: null
         });
       } else if (!nextProps.temDependente){
         this.setState({
           multiplosUsuarios: false,
-          modalEstaAberto: false,
+          modalAlunosDependentesEstaAberto: false,
           listaDeAlunos: null,
           usuario: nextProps.listaDeAlunos[0]
         });
@@ -136,6 +140,10 @@ class Login extends Component {
 				</div>
       );
     }
+  }
+
+  fecharModalUsuarioNaoExiste() {
+    this.setState({modalUsuarioNaoExisteEstaAberto: false});
   }
 
   render() {
@@ -190,9 +198,23 @@ class Login extends Component {
 						<button className="btn btn-default" onClick={() => this.props.history.push('/esqueciSenha')}>Esqueci minha senha</button>
           </div>
 
-          {this.state.modalEstaAberto ?
+          {this.state.modalUsuarioNaoExisteEstaAberto ?
+            <Modal
+              isOpen={this.state.modalUsuarioNaoExisteEstaAberto}
+              style={estiloDoModal}
+              contentLabel='Usuário não cadastrado'
+            >
+              <div className='login alerta'>
+                <h2>Aluno não cadastrado!</h2>
+                <button className='btn btn-primary btn-lg' onClick={this.fecharModalUsuarioNaoExiste.bind(this)}>Fechar</button>
+              </div>
+            </Modal>
+            : <span></span>
+          }
+
+          {this.state.modalAlunosDependentesEstaAberto ?
           <Modal
-            isOpen={this.state.modalEstaAberto}
+            isOpen={this.state.modalAlunosDependentesEstaAberto}
             style={estiloDoModal}
             contentLabel='Apresentar alunos dependentes'
           >

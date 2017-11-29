@@ -5,6 +5,7 @@ import usuarioReducer from './usuario_reducer';
 import cursosReducer from './cursos_reducer';
 import esqueciSenhaReducer from './esqueci_senha_reducer';
 import resetarSenhaReducer from './resetar_senha_reducer';
+import configuracaoReducer from './configuracao_reducer';
 
 const rootReducer = combineReducers({
   form,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   usuario: usuarioReducer,
   cursos: cursosReducer,
   esqueci_senha: esqueciSenhaReducer,
-  reset_senha: resetarSenhaReducer
+  reset_senha: resetarSenhaReducer,
+  configuracao: configuracaoReducer,
 });
 
 export default rootReducer;

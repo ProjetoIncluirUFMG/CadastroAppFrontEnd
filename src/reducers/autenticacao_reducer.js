@@ -22,6 +22,8 @@ export default function(state = ESTADO_INICIAL, action) {
     case AUTENTICAR_USUARIO:
       return {...state, erro: '', autenticado: true };
     case DESAUTENTICAR_USUARIO:
+      localStorage.removeItem('piToken');
+      localStorage.removeItem('piUser');
       return {...state, erro: '', temDependente: null, listaDeAlunos: null, autenticado: false };
     case ERRO_NA_AUTENTICACAO:
       return {...state, erro: action.payload, temDependente: null, listaDeAlunos: null, autenticado: false };
