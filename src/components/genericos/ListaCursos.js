@@ -14,6 +14,8 @@ const STATUS = {
 class ListaCursos extends Component {
 
 	static propTypes = {
+    history: PropTypes.object.isRequired,
+
     autenticado: PropTypes.bool.isRequired,
 		listaCursos: PropTypes.array.isRequired,
 		buscarCursos: PropTypes.func.isRequired,
@@ -28,15 +30,21 @@ class ListaCursos extends Component {
     }
 	}
 
+  carregarTelaDePreMatricula(rota, idDisciplina) {
+    this.props.history.push(`/${rota}/${idDisciplina}`);
+  }
+
   renderizarBotaoPreMatricula(disciplina) {
     const disciplinasDisponiveis = this.props.disciplinasDisponiveis;
-    if (disciplinasDisponiveis[disciplina.id_disciplina]) {
-      if (disciplinasDisponiveis[disciplina.id_disciplina].status === STATUS.VAGA_NO_CURSO)
-        return (<button type="button" className="btn btn-primary">Pré matricular no curso</button>);
-      else if (disciplinasDisponiveis[disciplina.id_disciplina].status === STATUS.FILA_DE_NIVELAMENTO)
-        return (<button type="button" className="btn btn-primary">Cadastrar para prova de nivelamento</button>);
-      else if (disciplinasDisponiveis[disciplina.id_disciplina].status === STATUS.FILA_DE_ESPERA)
-        return (<button type="button" className="btn btn-primary">Cadastrar para fila de espera</button>);
+    const idDisciplina = disciplina.id_disciplina;
+
+    if (disciplinasDisponiveis[idDisciplina]) {
+      if (disciplinasDisponiveis[idDisciplina].status === STATUS.VAGA_NO_CURSO)
+        return (<button type="button" className="btn btn-primary" onClick={() => this.carregarTelaDePreMatricula('pre_matricula', idDisciplina)}>Pré matricular no curso</button>);
+      else if (disciplinasDisponiveis[idDisciplina].status === STATUS.FILA_DE_NIVELAMENTO)
+        return (<button type="button" className="btn btn-primary" onClick={() => this.carregarTelaDePreMatricula('prova_de_nivelamento', idDisciplina)}>Cadastrar para prova de nivelamento</button>);
+      else if (disciplinasDisponiveis[idDisciplina].status === STATUS.FILA_DE_ESPERA)
+        return (<button type="button" className="btn btn-primary" onClick={() => this.carregarTelaDePreMatricula('fila_de_espera', idDisciplina)}>Cadastrar para fila de espera</button>);
     }
     return <span/>;
   }

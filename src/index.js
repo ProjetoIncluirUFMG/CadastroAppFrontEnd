@@ -83,7 +83,7 @@ function inicializarApp() {
           <Route path="/resetarSenha/:token" component={DesautenticacaoRequerida(ResetarSenha)} />
           <Route path="/fila_de_espera/:id_disciplina" component={AutenticacaoRequerida(CadastroFilaDeEspera)} />
           <Route path="/pre_matricula/:id_disciplina" component={AutenticacaoRequerida(CadastroPreMatricula)} />
-          <Route path="/fila_de_nivelamento/:id_disciplina" component={AutenticacaoRequerida(CadastroProvaDeNivelamento)} />
+          <Route path="/prova_de_nivelamento/:id_disciplina" component={AutenticacaoRequerida(CadastroProvaDeNivelamento)} />
         </App>
       </Router>
     </Provider>

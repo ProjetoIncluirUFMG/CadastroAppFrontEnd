@@ -29,7 +29,7 @@ class Home extends Component {
 			<div className="panel panel-default">
 				<div className="panel-heading"><b>Lista de cursos</b></div>
 				<div className="panel-body">
-					<ListaCursos />
+					<ListaCursos history={this.props.history}/>
 				</div>
 			</div>
 		);
