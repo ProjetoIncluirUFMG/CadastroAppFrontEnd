@@ -1,0 +1,2 @@
+export const BUSCAR_LISTA_DE_DISCIPLINAS_DISPONIVEIS = 'buscar_lista_de_disciplinas_disponiveis';
+export const ERRO_NAS_DISCIPLINAS_DISPONIVEIS = 'erro_nas_disciplinas_disponiveis';

@@ -12,6 +12,7 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import registerServiceWorker from './registerServiceWorker';
 
+import AutenticacaoRequerida from './components/genericos/AutenticacaoRequerida.js';
 import DesautenticacaoRequerida from './components/genericos/DesautenticacaoRequerida.js';
 import App from './components/App.js';
 import Home from './components/views/Home';
@@ -19,6 +20,9 @@ import Cadastro from './components/views/Cadastro';
 import Login from './components/views/Login';
 import EsqueciSenha from './components/views/EsqueciSenha';
 import ResetarSenha from './components/views/ResetarSenha';
+import CadastroFilaDeEspera from './components/views/pre_matricula/CadastroFilaDeEspera';
+import CadastroPreMatricula from './components/views/pre_matricula/CadastroPreMatricula';
+import CadastroProvaDeNivelamento from './components/views/pre_matricula/CadastroProvaDeNivelamento';
 
 import reducers from './reducers';
 import {
@@ -45,6 +49,7 @@ function inicializarApp() {
 
   const validacaoJWT = store => next => action => {
     let token = localStorage.getItem('piToken');
+    console.log("token: ", token)
     if (token) {
       let current_time = new Date().getTime() / 1000;
 	    if (current_time > jwt_decode(token).exp) {
@@ -59,10 +64,11 @@ function inicializarApp() {
 
   // Se tivermos um token, considere o usuario como loggado
   const token = localStorage.getItem('piToken');
-
   if (token) {
+    const usuario = JSON.parse(localStorage.getItem('piUser'));
     store.dispatch({
-      type: AUTENTICAR_USUARIO
+      type: AUTENTICAR_USUARIO,
+      payload: usuario
     });
   }
 
@@ -75,6 +81,9 @@ function inicializarApp() {
           <Route path="/login" component={DesautenticacaoRequerida(Login)} />
           <Route path="/esqueciSenha" component={DesautenticacaoRequerida(EsqueciSenha)} />
           <Route path="/resetarSenha/:token" component={DesautenticacaoRequerida(ResetarSenha)} />
+          <Route path="/fila_de_espera/:id_disciplina" component={AutenticacaoRequerida(CadastroFilaDeEspera)} />
+          <Route path="/pre_matricula/:id_disciplina" component={AutenticacaoRequerida(CadastroPreMatricula)} />
+          <Route path="/fila_de_nivelamento/:id_disciplina" component={AutenticacaoRequerida(CadastroProvaDeNivelamento)} />
         </App>
       </Router>
     </Provider>

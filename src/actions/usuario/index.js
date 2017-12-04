@@ -48,10 +48,8 @@ export function cadastrarUsuario(usuario) {
       .then(response => {
         dispatch({
           type: CADASTRAR_USUARIO,
-          payload: response.data
+          payload: response.data.jwt
         });
-
-        localStorage.setItem('piToken', response.data.jwt);
       })
       .catch((response) => {
         dispatch({

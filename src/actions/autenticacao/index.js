@@ -34,12 +34,9 @@ export function loginUsuario({senha, id_aluno}) {
 
     axios.post(`${API_URL}/usuario/login`, { senha, id_aluno })
       .then(response => {
-
-        localStorage.setItem('piUser', JSON.stringify(response.data));
-        localStorage.setItem('piToken', response.data.jwt);
-        
         dispatch({
-          type: AUTENTICAR_USUARIO
+          type: AUTENTICAR_USUARIO,
+          payload: response.data
         });
       })
       .catch(response => {

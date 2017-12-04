@@ -2,23 +2,49 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
-import * as actions from '../../actions/cursos';
+import * as acoesCurso from '../../actions/cursos';
+import * as acoesPreMatricula from '../../actions/pre_matricula';
+
+const STATUS = {
+  FILA_DE_ESPERA: 'FilaDeEspera',
+  FILA_DE_NIVELAMENTO: 'FilaDeNivelamento',
+  VAGA_NO_CURSO: 'VagaNoCurso',
+};
 
 class ListaCursos extends Component {
 
 	static propTypes = {
+    autenticado: PropTypes.bool.isRequired,
 		listaCursos: PropTypes.array.isRequired,
-		buscarCursos: PropTypes.func.isRequired
+		buscarCursos: PropTypes.func.isRequired,
+    disciplinasDisponiveis: PropTypes.object.isRequired,
+    buscarDisciplinasDisponiveis: PropTypes.func.isRequired,
 	}
 
 	componentWillMount() {
 		this.props.buscarCursos();
+    if (this.props.autenticado) {
+      this.props.buscarDisciplinasDisponiveis(localStorage.getItem('piToken'));
+    }
 	}
+
+  renderizarBotaoPreMatricula(disciplina) {
+    const disciplinasDisponiveis = this.props.disciplinasDisponiveis;
+    if (disciplinasDisponiveis[disciplina.id_disciplina]) {
+      if (disciplinasDisponiveis[disciplina.id_disciplina].status === STATUS.VAGA_NO_CURSO)
+        return (<button type="button" className="btn btn-primary">Pré matricular no curso</button>);
+      else if (disciplinasDisponiveis[disciplina.id_disciplina].status === STATUS.FILA_DE_NIVELAMENTO)
+        return (<button type="button" className="btn btn-primary">Cadastrar para prova de nivelamento</button>);
+      else if (disciplinasDisponiveis[disciplina.id_disciplina].status === STATUS.FILA_DE_ESPERA)
+        return (<button type="button" className="btn btn-primary">Cadastrar para fila de espera</button>);
+    }
+    return <span/>;
+  }
 
 	renderizarListaDeCursos() {
 		const cursos = this.props.listaCursos;
 
-		const listaDeCursos = cursos.map(function(curso) {
+		const listaDeCursos = cursos.map((curso) => {
 			return (
 				<span key={curso.id_curso}>
 					<a href={"#Menu" + curso.id_curso}
@@ -45,7 +71,7 @@ class ListaCursos extends Component {
 										<a className="list-group-item" data-parent={"#SubMenu" + disciplina.id_disciplina}>
 										{disciplina.ementa_disciplina ? disciplina.ementa_disciplina : "Nenhuma ementa encontrada."}
                     <hr />
-                    <button type="button" className="btn btn-primary">Matricular</button>
+                    {this.renderizarBotaoPreMatricula(disciplina)}
 										</a>
 									</div>
 								</span>
@@ -75,8 +101,12 @@ class ListaCursos extends Component {
 
 function mapStateToProps(state) {
   return {
-    listaCursos: state.cursos.lista
+    autenticado: state.autenticacao.autenticado,
+    listaCursos: state.cursos.lista,
+    disciplinasDisponiveis: state.pre_matricula.hashmap
   };
 }
+
+const actions = Object.assign({}, acoesCurso, acoesPreMatricula);
 
 export default connect(mapStateToProps, actions)(ListaCursos);

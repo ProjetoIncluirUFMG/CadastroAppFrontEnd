@@ -232,8 +232,8 @@ class Login extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.listaDeAlunos.map((aluno) => {
-                    return (<tr>
+                  {this.state.listaDeAlunos.map((aluno, index) => {
+                    return (<tr key={index}>
                       <td>{aluno.nome_aluno}</td>
                       <td>{aluno.email}</td>
                       <td>{aluno.rg}</td>

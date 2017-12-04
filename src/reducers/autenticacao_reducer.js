@@ -20,6 +20,8 @@ export default function(state = ESTADO_INICIAL, action) {
   switch (action.type) {
     case CADASTRAR_USUARIO:
     case AUTENTICAR_USUARIO:
+      localStorage.setItem('piUser', JSON.stringify(action.payload));
+      localStorage.setItem('piToken', action.payload.jwt);
       return {...state, erro: '', autenticado: true };
     case DESAUTENTICAR_USUARIO:
       localStorage.removeItem('piToken');
