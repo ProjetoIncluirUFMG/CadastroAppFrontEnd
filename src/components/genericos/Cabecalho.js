@@ -40,6 +40,11 @@ class Cabecalho extends Component {
     }
   }
 
+  redirecionarParaPaginaDePreMatriculas() {
+    this.props.history.push('/preMatriculas');
+  }
+
+
   renderizarOpcoes() {
     if (this.props.autenticado) {
       const usuario = JSON.parse(localStorage.getItem('piUser'));
@@ -48,6 +53,10 @@ class Cabecalho extends Component {
           <a className="dropdown-toggle" data-toggle="dropdown" href="">           {usuario.nome}&nbsp;<span className="caret"></span>
           </a>
           <ul className="dropdown-menu">
+            <li className="nav-item" key={1}>
+              <a href="" className="nav-link"
+                onClick={this.redirecionarParaPaginaDePreMatriculas.bind(this)}>Minhas Pré-matrículas</a>
+            </li>
             <li className="nav-item" key={2}>
               <a href="" className="nav-link"
                 onClick={this.props.logoutUsuario}>Sair</a>

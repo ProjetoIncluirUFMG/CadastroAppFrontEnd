@@ -26,12 +26,12 @@ class ListaCursos extends Component {
 	componentWillMount() {
 		this.props.buscarCursos();
     if (this.props.autenticado) {
-      this.props.buscarDisciplinasDisponiveis(localStorage.getItem('piToken'));
+      this.props.buscarDisciplinasDisponiveis();
     }
 	}
 
-  carregarTelaDePreMatricula(rota, idDisciplina) {
-    this.props.history.push(`/${rota}/${idDisciplina}`);
+  carregarTelaDePreMatricula(idDisciplina) {
+    this.props.history.push(`/preMatricula/${idDisciplina}`);
   }
 
   renderizarBotaoPreMatricula(disciplina) {
@@ -40,11 +40,11 @@ class ListaCursos extends Component {
 
     if (disciplinasDisponiveis[idDisciplina]) {
       if (disciplinasDisponiveis[idDisciplina].status === STATUS.VAGA_NO_CURSO)
-        return (<button type="button" className="btn btn-primary" onClick={() => this.carregarTelaDePreMatricula('pre_matricula', idDisciplina)}>Pré matricular no curso</button>);
+        return (<span><hr /><button type="button" className="btn btn-primary" onClick={() => this.carregarTelaDePreMatricula(idDisciplina)}>Realizar Pré matrícular no curso</button></span>);
       else if (disciplinasDisponiveis[idDisciplina].status === STATUS.FILA_DE_NIVELAMENTO)
-        return (<button type="button" className="btn btn-primary" onClick={() => this.carregarTelaDePreMatricula('prova_de_nivelamento', idDisciplina)}>Cadastrar para prova de nivelamento</button>);
+        return (<span><hr /><button type="button" className="btn btn-primary" onClick={() => this.carregarTelaDePreMatricula(idDisciplina)}>Cadastrar para prova de nivelamento</button></span>);
       else if (disciplinasDisponiveis[idDisciplina].status === STATUS.FILA_DE_ESPERA)
-        return (<button type="button" className="btn btn-primary" onClick={() => this.carregarTelaDePreMatricula('fila_de_espera', idDisciplina)}>Cadastrar para fila de espera</button>);
+        return (<span><hr /><button type="button" className="btn btn-primary" onClick={() => this.carregarTelaDePreMatricula(idDisciplina)}>Cadastrar para fila de espera</button></span>);
     }
     return <span/>;
   }
@@ -78,7 +78,6 @@ class ListaCursos extends Component {
 									<div className="collapse list-group-submenu" id={"SubMenu" + disciplina.id_disciplina}>
 										<a className="list-group-item" data-parent={"#SubMenu" + disciplina.id_disciplina}>
 										{disciplina.ementa_disciplina ? disciplina.ementa_disciplina : "Nenhuma ementa encontrada."}
-                    <hr />
                     {this.renderizarBotaoPreMatricula(disciplina)}
 										</a>
 									</div>

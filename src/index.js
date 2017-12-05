@@ -20,9 +20,8 @@ import Cadastro from './components/views/Cadastro';
 import Login from './components/views/Login';
 import EsqueciSenha from './components/views/EsqueciSenha';
 import ResetarSenha from './components/views/ResetarSenha';
-import CadastroFilaDeEspera from './components/views/pre_matricula/CadastroFilaDeEspera';
-import CadastroPreMatricula from './components/views/pre_matricula/CadastroPreMatricula';
-import CadastroProvaDeNivelamento from './components/views/pre_matricula/CadastroProvaDeNivelamento';
+import CadastroPreMatricula from './components/views/CadastroPreMatricula';
+import ListaPreMatricula from './components/views/ListaPreMatricula';
 
 import reducers from './reducers';
 import {
@@ -49,7 +48,7 @@ function inicializarApp() {
 
   const validacaoJWT = store => next => action => {
     let token = localStorage.getItem('piToken');
-    console.log("token: ", token)
+    console.log("Token: ", token)
     if (token) {
       let current_time = new Date().getTime() / 1000;
 	    if (current_time > jwt_decode(token).exp) {
@@ -81,9 +80,8 @@ function inicializarApp() {
           <Route path="/login" component={DesautenticacaoRequerida(Login)} />
           <Route path="/esqueciSenha" component={DesautenticacaoRequerida(EsqueciSenha)} />
           <Route path="/resetarSenha/:token" component={DesautenticacaoRequerida(ResetarSenha)} />
-          <Route path="/fila_de_espera/:id_disciplina" component={AutenticacaoRequerida(CadastroFilaDeEspera)} />
-          <Route path="/pre_matricula/:id_disciplina" component={AutenticacaoRequerida(CadastroPreMatricula)} />
-          <Route path="/prova_de_nivelamento/:id_disciplina" component={AutenticacaoRequerida(CadastroProvaDeNivelamento)} />
+          <Route path="/preMatricula/:id_disciplina" component={AutenticacaoRequerida(CadastroPreMatricula)} />
+          <Route path="/preMatriculas" component={AutenticacaoRequerida(ListaPreMatricula)} />
         </App>
       </Router>
     </Provider>

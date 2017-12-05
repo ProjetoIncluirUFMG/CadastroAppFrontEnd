@@ -1,0 +1,8 @@
+.pre_matriculas .carregando {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 1px solid #ccc;
+  background-color: #f3f3f3;
+}
